@@ -13,7 +13,21 @@ OBJ	=	$(SRC:.cpp=.o)
 
 CXXFLAGS	=	-Wall -Wextra -std=c++11 -O3
 
-LDFLAGS	=	-lglut -lGLU -lGL  -lXext -lX11 -lm
+
+
+#LDFLAGS	=	-lglut -lGLU -lGL  -lXext -lX11 -lm
+
+#CFLAGS= 
+
+OS := $(shell uname)
+
+ifeq ($(OS),Linux)
+	LDFLAGS= -lglut -lGLU -lGL  -lXext -lX11 -lm
+endif
+ifeq ($(OS),Darwin)
+	LDFLAGS= -framework GLUT -framework OpenGL -framework Cocoa 
+endif
+
 
 $(NAME):	$(OBJ)
 		$(CXX) $(OBJ) $(LDFLAGS) -o $(NAME)

@@ -11,3 +11,9 @@
 *.lai
 *.la
 *.a
+
+# stupid OSX system file
+.DS_Store
+
+# ouput file
+cam
