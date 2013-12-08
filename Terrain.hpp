@@ -9,7 +9,7 @@
 
 #define INDEX(x, y) ((((y) * _nbVertex) + (x)))
 
-class Terrain : public Node
+class Terrain : public Geode
 {
 
 protected:

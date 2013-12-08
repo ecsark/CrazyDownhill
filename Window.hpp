@@ -31,6 +31,10 @@ public:
     glutInitWindowSize(_width, _height);
     glutCreateWindow("CSE 167");
 
+    GLenum res = glewInit();
+    if (res != GLEW_OK)
+      std::cout << "Glew error" << std::endl;
+
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -47,6 +51,7 @@ public:
     Group *world = new Group;
     _scene = world;
     Terrain *t = new Terrain(100, 100, 8);
+    t->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
     world->attachNode(t);
   }
 

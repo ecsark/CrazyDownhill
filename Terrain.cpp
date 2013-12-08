@@ -175,8 +175,11 @@ void Terrain::draw()
   int x = 0;
   int y = 0;
 
+  _shader.Use();
   // glBegin(GL_POINTS);
   glBegin(GL_QUADS);
+  // glDrawArrays(GL_TRIANGLES, 0, 3);
+
   for (; y < _nbVertex - 1; ++y)
     {
       for (x = 0; x < _nbVertex - 1; ++x)
@@ -215,6 +218,7 @@ void Terrain::draw()
 	}
     }
   glEnd();
+  _shader.UnUse();
 }
 
 
