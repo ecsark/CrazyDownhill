@@ -15,7 +15,7 @@
 # include <vector>
 # include "Singleton.hpp"
 # include "Camera.hpp"
-// # include "Node.hpp"
+# include "Node.hpp"
 // # include "MatrixTransform.hpp"
 // # include "Sphere.hpp"
 // # include "Cube.hpp"

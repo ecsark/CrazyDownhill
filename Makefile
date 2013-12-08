@@ -2,7 +2,7 @@
 
 NAME	=	cam
 
-CXX	=	g++
+CXX	=	clang++
 
 SRC	=	main.cpp \
 		Window.cpp \

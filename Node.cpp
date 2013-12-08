@@ -17,7 +17,7 @@
 #  error "Operating system not supported"
 # endif
 #include <cassert>
-#include "Node.h"
+#include "Node.hpp"
 
 void pushAndLoad() {
     //GLdouble matrix[16];
