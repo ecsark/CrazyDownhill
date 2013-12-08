@@ -14,7 +14,7 @@ SRC	=	main.cpp \
 
 OBJ	=	$(SRC:.cpp=.o)
 
-CXXFLAGS	=	-Wall -Wextra -std=c++11  -O3
+CXXFLAGS	=	-Wall -Wextra -std=c++11  -ggdb
 
 
 

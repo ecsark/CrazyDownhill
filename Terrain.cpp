@@ -128,8 +128,9 @@ void Terrain::initNormalMap(int max)
   int j;
   Vector3 n;
 
-  for (; i < max; ++i)
-    for (j = 0; j < max; ++j)
+  // FIXME : check what is the normal of the edge
+  for (; i < max - 1; ++i)
+    for (j = 0; j < max - 1; ++j)
       {
 	n = (_pts[INDEX(j, i+1)] - _pts[INDEX(j, i)]).cross(_pts[INDEX(j + 1, i)] - _pts[INDEX(j, i)]);
 	n.normalize();
