@@ -103,6 +103,23 @@ struct Vector3
 
     friend Vector3 operator*(const float a, const Vector3 vec);
     friend std::ostream& operator<<(std::ostream& os, const Vector3& vec);
+
+  double deg_cosine(Vector3& another)
+  {
+    return dot(another) / sqrt(magsq()*another.magsq());
+  }
+  
+  double magsq ()
+  {
+    return x*x + y*y + z*z;
+  }
+  
+  double distsq(Vector3& another)
+  {
+    return (x-another[0])*(x-another[0]) +
+      (y-another[1])*(y-another[1]) +
+      (z-another[2])*(z-another[2]);
+  }
 };
 
 
@@ -119,6 +136,7 @@ struct Vector4
 
     // ctors
     Vector4() : x(0), y(0), z(0), w(0) {};
+    Vector4(const Vector3 &cpy) : x(cpy[0]), y(cpy[1]), z(cpy[2]), w(0) {};
     Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {};
 
     // utils functions

@@ -2,16 +2,17 @@
 
 NAME	=	cam
 
-CXX	=	clang++
+CXX	=	g++
 
 SRC	=	main.cpp \
 		Window.cpp \
 		Camera.cpp \
-		Matrices.cpp
+		Matrices.cpp \
+		Node.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
-CXXFLAGS	=	-Wall -Wextra -std=c++11 -O3
+CXXFLAGS	=	-Wall -Wextra -std=c++11  -O3
 
 
 

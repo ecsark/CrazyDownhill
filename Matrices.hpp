@@ -198,6 +198,33 @@ public:
     friend Vector4 operator*(const Vector4& vec, const Matrix4& m); // pre-multiplication
     friend std::ostream& operator<<(std::ostream& os, const Matrix4& m);
 
+  Vector3 multiply3(Vector3& vec) {
+    Vector3 new_vec;
+    for (int i=0; i<3; ++i) {
+        double sum = 0;
+        for (int k=0; k<3; ++k) {
+            sum += m[k * 4 + i] * vec[k];
+        }
+        new_vec[i] = sum;
+    }
+    return new_vec;
+}
+
+  Vector4 multiplyl(Vector4& vec)
+{
+    Vector4 new_vec;
+    for(int i=0; i<4; i++)
+    {
+        double sum = 0;
+        for(int k=0; k<4; k++)
+        {
+            sum += m[k * 4 + i] * vec[k];
+        }
+        new_vec[i] = sum;
+    }
+    return new_vec;
+}
+
 protected:
 
 private:
