@@ -3,6 +3,7 @@
 //Last Modified: February 2, 2011
 
 #include "GLSLShader.hpp"
+#include "loadShader.hpp"
 #include <iostream>
 
 
@@ -120,4 +121,12 @@ void GLSLShader::LoadFromFile(GLenum whichShader, const string& filename){
 	} else {
 		cerr<<"Error loading shader: "<<filename<<endl;
 	}
+}
+
+GLuint GLSLShader::LoadShaders(const char * vertex_file_path,const char * fragment_file_path)
+{
+  GLuint id = ::LoadShaders(vertex_file_path, fragment_file_path);
+  // _shaders[_totalShaders++]=shader;
+  _program = id;
+  return id;
 }

@@ -9,17 +9,30 @@
 
 #define INDEX(x, y) ((((y) * _nbVertex) + (x)))
 
+typedef struct
+{
+  float x, y, z;
+} Vertex3;
+
+  static const GLfloat g_vertex_buffer_data[] = {
+    -1.0f, -1.0f, 0.0f,
+    1.0f, -1.0f, 0.0f,
+    0.0f,  1.0f, 0.0f,
+  };
+
 class Terrain : public Geode
 {
 
 protected:
 
-  std::vector<Vector3> _pts;
-  std::vector<Vector3> _normalMap;
+  std::vector<Vertex3> _pts;
+  std::vector<Vertex3> _normalMap;
   
   int _sizeX;
   int _sizeY;
   int _nbVertex;
+
+  GLuint _VBO;
 
 public:
   Terrain(int sizeX, int sizeY, int factor):
@@ -28,6 +41,12 @@ public:
   {
     _nbVertex = (int)pow(2, factor) + 1;
     initTerrain();
+
+
+    glGenBuffers(1, &_VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3) * _pts.size(), &(_pts.front()), GL_STATIC_DRAW);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
   }
 
   virtual ~Terrain() {}

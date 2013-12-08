@@ -58,8 +58,9 @@ protected:
   
 public:
   void loadShaders(const std::string &vertex, const std::string &frag) {
-    _shader.LoadFromFile(GL_VERTEX_SHADER, vertex);
-    _shader.LoadFromFile(GL_FRAGMENT_SHADER, frag);
+    _shader.LoadShaders(vertex.c_str(), frag.c_str());
+    // _shader.LoadFromFile(GL_VERTEX_SHADER, vertex);
+    // _shader.LoadFromFile(GL_FRAGMENT_SHADER, frag);
   }
   virtual void draw() {}
 };

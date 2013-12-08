@@ -10,7 +10,8 @@ SRC	=	main.cpp \
 		Matrices.cpp \
 		Node.cpp \
 		Terrain.cpp \
-		GLSLShader.cpp
+		GLSLShader.cpp \
+		loadShader.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 

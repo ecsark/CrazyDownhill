@@ -1,11 +1,21 @@
-#version 120
+#version 130
 
 attribute vec3 vertexPosition;
+in vec3 position;
+in vec3 norm;
+in vec2 textCoord;
+
+out vec3 outNorm;
+out vec3 texCoord;
 
 uniform mat4 vertexPosition_modelspace;
+uniform mat4x4 MVP;
 
 void main(){
   gl_FrontColor = gl_Color;
-  gl_Position = vec4(vertexPosition, 1.0);
-       // gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+  
+  gl_Position =  gl_ModelViewProjectionMatrix * vec4(vertexPosition, 1.0);
+  // gl_Position = vec4(1, 1, 1, 1.0);
+  // gl_Position =  gl_Vertex * gl_ModelViewProjectionMatrix;
+  // gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 }
