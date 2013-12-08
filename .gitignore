@@ -17,3 +17,7 @@
 
 # ouput file
 cam
+
+# Xcode
+build
+*.xcodeproj
