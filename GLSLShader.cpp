@@ -22,6 +22,8 @@ GLSLShader::~GLSLShader(void)
 	_uniformLocationList.clear();	
 }
 
+//GL_VERTEX_SHADER
+// GL_FRAGMENT_SHADER
 void GLSLShader::LoadFromString(GLenum type, const string& source) {	
 	GLuint shader = glCreateShader (type);
 

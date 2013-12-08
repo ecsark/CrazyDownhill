@@ -54,10 +54,14 @@ public:
 class Geode: public Node {
 protected:
   
-  GLSLShader shader;
+  GLSLShader _shader;
   
 public:
-    virtual void draw() {}
+  void loadShaders(const std::string &vertex, const std::string &frag) {
+    _shader.LoadFromFile(GL_VERTEX_SHADER, vertex);
+    _shader.LoadFromFile(GL_FRAGMENT_SHADER, frag);
+  }
+  virtual void draw() {}
 };
 
 
