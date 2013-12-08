@@ -2,16 +2,8 @@
 #ifndef WINDOW_HPP_
 # define WINDOW_HPP_
 
-# ifdef __linux__
-#  include <GL/glut.h>
-# elif __MACH__
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
-#  include <GLUT/glut.h>
-# else
-#  error "Operating system not supported"
-# endif
 
+# include "glheader.hpp"
 # include <vector>
 # include "Singleton.hpp"
 # include "Camera.hpp"

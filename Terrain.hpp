@@ -1,9 +1,9 @@
 #ifndef TERRAIN_HPP_
 # define TERRAIN_HPP_
 
+# include "glheader.hpp"
 # include <string>
 # include <vector>
-# include <GL/gl.h>
 # include <math.h>
 # include "Node.hpp"
 

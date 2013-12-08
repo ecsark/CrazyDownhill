@@ -1,11 +1,12 @@
 
-# ifdef __linux__
-#  include <GL/glut.h>
-# elif __MACH__
-#  include <GLUT/glut.h>
-# else
-#  error "Operating system not supported"
-# endif
+// # ifdef __linux__
+// #  include <GL/glut.h>
+// # elif __MACH__
+// #  include <GLUT/glut.h>
+// # else
+// #  error "Operating system not supported"
+// # endif
+#include "glheader.hpp"
 #include "Window.hpp"
 
 int main(int ac, char *av[])

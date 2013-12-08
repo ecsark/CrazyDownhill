@@ -10,6 +10,7 @@
 #define __SceneGraph__Node__
 
 #include <vector>
+#include "GLSLShader.hpp"
 #include "Kernel.cpp"
 #include "Vectors.hpp"
 
@@ -51,6 +52,10 @@ public:
 
 
 class Geode: public Node {
+protected:
+  
+  GLSLShader shader;
+  
 public:
     virtual void draw() {}
 };

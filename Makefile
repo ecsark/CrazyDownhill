@@ -9,7 +9,8 @@ SRC	=	main.cpp \
 		Camera.cpp \
 		Matrices.cpp \
 		Node.cpp \
-		Terrain.cpp
+		Terrain.cpp \
+		GLSLShader.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
@@ -24,10 +25,10 @@ CXXFLAGS	=	-Wall -Wextra -std=c++11  -O3
 OS := $(shell uname)
 
 ifeq ($(OS),Linux)
-	LDFLAGS= -lglut -lGLU -lGL  -lXext -lX11 -lm
+	LDFLAGS= -lglut -lGLU -lGL -lGLEW -lXext -lX11 -lm
 endif
 ifeq ($(OS),Darwin)
-	LDFLAGS= -framework GLUT -framework OpenGL -framework Cocoa 
+	LDFLAGS= -framework GLUT -framework OpenGL -framework GLEW -framework Cocoa 
 endif
 
 

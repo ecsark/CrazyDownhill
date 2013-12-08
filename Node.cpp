@@ -6,16 +6,7 @@
 //  Copyright (c) 2013 Edward Cheng. All rights reserved.
 //
 
-# ifdef __linux__
-#  include <GL/gl.h>
-#  include <GL/glut.h>
-# elif __MACH__
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
-#  include <GLUT/glut.h>
-# else
-#  error "Operating system not supported"
-# endif
+#include "glheader.hpp"
 #include <cassert>
 #include "Node.hpp"
 
