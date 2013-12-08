@@ -61,8 +61,9 @@ void Window::displayCallback(void)
   glLoadMatrixf(_camera.getGLMatrix());
 
   //scene
-  // if (_scene != NULL)
-  //   _scene->draw(_camera.getMatrix());
+  if (_scene != NULL)
+    _scene->draw();
+    // _scene->draw(_camera.getMatrix());
   glFlush();  
   glutSwapBuffers();
   float end = read_timer();

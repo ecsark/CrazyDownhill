@@ -16,12 +16,7 @@
 # include "Singleton.hpp"
 # include "Camera.hpp"
 # include "Node.hpp"
-// # include "MatrixTransform.hpp"
-// # include "Sphere.hpp"
-// # include "Cube.hpp"
-// # include "Group.hpp"
-// # include "Guy.hpp"
-// # include "Terrain.hpp"
+# include "Terrain.hpp"
 
 class Window : public Singleton<Window>
 {
@@ -29,13 +24,13 @@ private:
 
   int _width;
   int _height;
-  // Node *_scene;
+  Node *_scene;
   Camera _camera;
 
 
 public:
   Window() :
-    // _scene(NULL),
+    _scene(NULL),
     _camera(0.f,0.f, 20.f, 500.f,0.f,-20.f, 0.f,1.f,0.f)
   {
     _width = 500;
@@ -49,35 +44,19 @@ public:
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDisable(GL_CULL_FACE);
 
-    // createScene();
+    createScene();
   }
 
   virtual ~Window(){}
 
 
-  // void createScene(void)
-  // {
-  //   int i;
-  //   int j;
-  //   int max = 100;
-
-  //   Group *world = new Group("World");
-  //   _scene = world;
-  //   Terrain *t = new Terrain("Ground", 100, 100, 8);
-  //   _scene->addNode(t);
-  //   // Guy *g;
-
-  //   // for (i = -(max / 2) - 1; i < max / 2; ++i)
-  //   //   {
-  //   // 	for (j = -(max / 2) - 1; j < max /2 ; ++j)
-  //   // 	  {
-  //   // 	    g = new Guy("Guy");
-  //   // 	    g->translate(i * 4, 0, j  * 4);
-  //   // 	    world->addNode(g);
-  //   // 	  }
-  //   //   }
-    
-  // }
+  void createScene(void)
+  {
+    Group *world = new Group;
+    _scene = world;
+    Terrain *t = new Terrain(100, 100, 8);
+    world->attachNode(t);
+  }
 
 
   static void idleCallbackTramp(void);

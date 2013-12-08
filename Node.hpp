@@ -76,7 +76,7 @@ public:
 class Cubiod: public Geode {
 private:
     double _length, _width, _height;
-    double _radius = -1;
+    // double _radius = -1;
 public:
     Cubiod(double length, double width, double height);
     virtual void draw();

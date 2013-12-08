@@ -8,7 +8,8 @@ SRC	=	main.cpp \
 		Window.cpp \
 		Camera.cpp \
 		Matrices.cpp \
-		Node.cpp
+		Node.cpp \
+		Terrain.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
