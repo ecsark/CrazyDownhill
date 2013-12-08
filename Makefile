@@ -1,5 +1,3 @@
-
-
 NAME	=	cam
 
 CXX	=	clang++
@@ -28,7 +26,7 @@ ifeq ($(OS),Linux)
 	LDFLAGS= -lglut -lGLU -lGL -lGLEW -lXext -lX11 -lm
 endif
 ifeq ($(OS),Darwin)
-	LDFLAGS= -framework GLUT -framework OpenGL -framework GLEW -framework Cocoa 
+	LDFLAGS= -framework GLUT -framework OpenGL -framework Cocoa -L/opt/local/lib -lglew
 endif
 
 

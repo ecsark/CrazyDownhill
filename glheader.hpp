@@ -10,8 +10,6 @@
 #  include <GL/glut.h>
 # elif __MACH__
 #  ifndef __GLEW_H__
-#   error "Hey man! correct that =)"
-#   include <GL/glew.h>
 #  endif
 #  include <OpenGL/gl.h>
 #  include <OpenGL/glu.h>
