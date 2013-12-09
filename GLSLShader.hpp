@@ -25,7 +25,10 @@ public:
 	GLuint operator[](const string& attribute);
 	GLuint operator()(const string& uniform);
 	//Program deletion
+
 	void DeleteProgram() {glDeleteProgram(_program);_program=-1;}
+
+  GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 private:
 	enum ShaderType {VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER};
 	GLuint	_program;
