@@ -14,11 +14,11 @@ typedef struct
   float x, y, z;
 } Vertex3;
 
-  static const GLfloat g_vertex_buffer_data[] = {
-    -1.0f, -1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f,
-    0.0f,  1.0f, 0.0f,
-  };
+  // static const GLfloat g_vertex_buffer_data[] = {
+  //   -1.0f, -1.0f, 0.0f,
+  //   1.0f, -1.0f, 0.0f,
+  //   0.0f,  1.0f, 0.0f,
+  // };
 
 class Terrain : public Geode
 {
@@ -27,6 +27,7 @@ protected:
 
   std::vector<Vertex3> _pts;
   std::vector<Vertex3> _normalMap;
+  std::vector<unsigned> _indices;
   
   int _sizeX;
   int _sizeY;
@@ -41,8 +42,6 @@ public:
   {
     _nbVertex = (int)pow(2, factor) + 1;
     initTerrain();
-
-
     glGenBuffers(1, &_VBO);
     glBindBuffer(GL_ARRAY_BUFFER, _VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3) * _pts.size(), &(_pts.front()), GL_STATIC_DRAW);
@@ -51,6 +50,7 @@ public:
 
   virtual ~Terrain() {}
 
+  void initIndiceTable(void);
   bool isInMap(int x, int y);
   float averageSquare(int x, int y, int size);
   float averageDiamon(int x, int y, int size);
