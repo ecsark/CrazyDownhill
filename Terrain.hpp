@@ -28,13 +28,15 @@ protected:
   std::vector<Vertex3> _pts;
   std::vector<Vertex3> _normalMap;
   std::vector<unsigned> _indices;
+  std::vector<Vertex3> p_pts;
+  std::vector<Vertex3> p_normalMap;
+  std::vector<unsigned> p_indices;
   
   int _sizeX;
   int _sizeY;
   int _nbVertex;
 
   GLuint _VBO;
-  GLuint _VBN; //for normals
 
 public:
   Terrain(int sizeX, int sizeY, int factor):
@@ -44,11 +46,8 @@ public:
     _nbVertex = (int)pow(2, factor) + 1;
     initTerrain();
     glGenBuffers(1, &_VBO);
-    glGenBuffers(2, &_VBN);
     glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, _VBN);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3) * _pts.size(), &(_pts.front()), GL_STATIC_DRAW);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3) * _normalMap.size(), &(_normalMap.front()), GL_STATIC_DRAW);
     // glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
   }
 
@@ -66,6 +65,7 @@ public:
   void initTerrain(int seed = 0);
   virtual void draw();
   void ppMap(void);
+  
 };
 
 #endif

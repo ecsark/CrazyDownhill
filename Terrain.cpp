@@ -27,8 +27,10 @@ void Terrain::initIndiceTable(void)
       _indices[index++] = vertexIndex;                           // V0
       _indices[index++] = vertexIndex + terrainWidth;            // V2
       _indices[index++] = vertexIndex + terrainWidth + 1;        // V3
+      
     }
   }
+  
   // int i = 0;
   // int j;
   // GL_UNSIGNED_INT indice = 0;
@@ -163,9 +165,18 @@ void Terrain::diamondSquare(int x1, int x2, int y1, int y2)
   }
 }
 
+Vector3 calcNormal(Vertex3 _a, Vertex3 _b, Vertex3 _c) {
+  Vector3 a(_a.x, _a.y, _a.z), b(_b.x, _b.y, _b.z), c(_c.x, _c.y, _c.z);
+  Vector3 ab = b-a;
+  Vector3 ac = c-a;
+  Vector3 p = ab.cross(ac);
+  p.normalize();
+  return p;
+}
+
 void Terrain::initNormalMap(int max)
 {
-  int i = 0;
+  int i = 1;
   int j;
   Vector3 n;
   Vector3 tmp1;
@@ -173,8 +184,13 @@ void Terrain::initNormalMap(int max)
   
   // FIXME : check what is the normal of the edge
   for (; i < max - 1; ++i)
-    for (j = 0; j < max - 1; ++j)
+    for (j = 1; j < max - 1; ++j)
     {
+      Vector3 n1 = calcNormal(_pts[INDEX(j, i)], _pts[INDEX(j-1, i)], _pts[INDEX(j, i-1)]);
+      Vector3 n2 = calcNormal(_pts[INDEX(j, i)], _pts[INDEX(j, i+1)], _pts[INDEX(j-1, i)]);
+      Vector3 n3 = calcNormal(_pts[INDEX(j, i)], _pts[INDEX(j+1, i)], _pts[INDEX(j, i+1)]);
+      Vector3 n4 = calcNormal(_pts[INDEX(j, i)], _pts[INDEX(j, i-1)], _pts[INDEX(j+1, i)]);
+      /*
       tmp.set(_pts[INDEX(j, i)].x, _pts[INDEX(j, i)].y, _pts[INDEX(j, i)].z);
       tmp1.set(_pts[INDEX(j, i+1)].x, _pts[INDEX(j, i+1)].y, _pts[INDEX(j, i+1)].z);
       n = tmp1 - tmp;
@@ -182,9 +198,16 @@ void Terrain::initNormalMap(int max)
       n = n.cross(tmp1 - tmp);
       // n = (_pts[INDEX(j, i+1)] - _pts[INDEX(j, i)]).cross(_pts[INDEX(j + 1, i)] - _pts[INDEX(j, i)]);
       n.normalize();
-      _normalMap[INDEX(j, i)].x = n[0];
-      _normalMap[INDEX(j, i)].y = n[1];
-      _normalMap[INDEX(j, i)].z = n[2];
+       */
+      _normalMap[INDEX(j, i)].x = (n1.x+n2.x+n3.x+n4.x)/4;
+      _normalMap[INDEX(j, i)].y = (n1.y+n2.y+n3.y+n4.y)/4;
+      _normalMap[INDEX(j, i)].z = (n1.z+n2.z+n3.z+n4.z)/4;
+      Vector3 vec((n1.x+n2.x+n3.x+n4.x)/4, (n1.y+n2.y+n3.y+n4.y)/4, (n1.z+n2.z+n3.z+n4.z)/4);
+      vec.normalize();
+      _normalMap[INDEX(j, i)].x = vec.x;
+      _normalMap[INDEX(j, i)].y = vec.y;
+      _normalMap[INDEX(j, i)].z = vec.z;
+      
     }
   
   // FIXME: hack
@@ -251,67 +274,18 @@ void Terrain::initTerrain(int seed)
 
 void Terrain::draw()
 {
-  // int x = 0;
-  // int y = 0;
-  
   _shader.Use();
   
   GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
-  //GLuint normalID = glGetAttribLocation(_shader.GetProgram(), "norm");
   glEnableVertexAttribArray(vertexID);
-  //glEnableVertexAttribArray(normalID);
   glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, _VBN);
   glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
-  //glVertexAttribPointer(_shader["norm"], 3, GL_FLOAT, GL_FALSE, 0, 0);
   glEnableClientState(GL_NORMAL_ARRAY);
   glNormalPointer(GL_FLOAT, 3, BUFFER_OFFSET(0));
   
-  // glDrawArrays(GL_POINTS, 0, _pts.size());
   glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, &(_indices[0]));
   
-  //glDisableClientState(GL_NORMAL_ARRAY);
-  /* glBegin(GL_POINTS);
-   // for (; y < _nbVertex - 1 && 0; ++y)
-   //   {
-   //     for (x = 0; x < _nbVertex - 1; ++x)
-   // 	{
-   // 	  glColor3f(1, 1, 1);
-   // 	  glNormal3f(_normalMap[INDEX(x, y)].x,
-   // 		     _normalMap[INDEX(x, y)].y,
-   // 		     _normalMap[INDEX(x, y)].z);
-   // 	  glVertex3f(_pts[INDEX(x, y)].x,
-   // 		     _pts[INDEX(x, y)].y,
-   // 		     _pts[INDEX(x, y)].z);
-   
-   
-   // 	  glNormal3f(_normalMap[INDEX(x + 1, y)].x,
-   // 		     _normalMap[INDEX(x + 1, y)].y,
-   // 		     _normalMap[INDEX(x + 1, y)].z);
-   // 	  glVertex3f(_pts[INDEX(x + 1, y)].x,
-   // 		     _pts[INDEX(x + 1, y)].y,
-   // 		     _pts[INDEX(x + 1, y)].z);
-   
-   
-   // 	  glNormal3f(_normalMap[INDEX(x + 1, y + 1)].x,
-   // 		     _normalMap[INDEX(x + 1, y + 1)].y,
-   // 		     _normalMap[INDEX(x + 1, y + 1)].z);
-   // 	  glVertex3f(_pts[INDEX(x + 1, y + 1)].x,
-   // 		     _pts[INDEX(x + 1, y + 1)].y,
-   // 		     _pts[INDEX(x + 1, y + 1)].z);
-   
-   
-   // 	  glNormal3f(_normalMap[INDEX(x, y + 1)].x,
-   // 		     _normalMap[INDEX(x, y + 1)].y,
-   // 		     _normalMap[INDEX(x, y + 1)].z);
-   // 	  glVertex3f(_pts[INDEX(x, y + 1)].x,
-   // 		     _pts[INDEX(x, y + 1)].y,
-   // 		     _pts[INDEX(x, y + 1)].z);
-   // 	}
-   //   }
-   // glEnd();
-   */
-  _shader.UnUse();
+  glDisableClientState(GL_NORMAL_ARRAY);  _shader.UnUse();
 }
 
 
