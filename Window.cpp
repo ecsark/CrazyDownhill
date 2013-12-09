@@ -4,17 +4,17 @@
 
 double read_timer( )
 {
-    static bool initialized = false;
-    static timeval start;
-    struct timeval end;
-    if( !initialized )
-    {
-        gettimeofday( &start, NULL );
-        initialized = true;
-    }
-    gettimeofday( &end, NULL );
-    return (end.tv_sec - start.tv_sec) + 1.0e-6 * (end.tv_usec - start.tv_usec);
-    return 0;
+  static bool initialized = false;
+  static timeval start;
+  struct timeval end;
+  if( !initialized )
+  {
+    gettimeofday( &start, NULL );
+    initialized = true;
+  }
+  gettimeofday( &end, NULL );
+  return (end.tv_sec - start.tv_sec) + 1.0e-6 * (end.tv_usec - start.tv_usec);
+  return 0;
 }
 
 
@@ -59,22 +59,23 @@ void Window::displayCallback(void)
   m.identity();
   float start = read_timer();
   glLoadMatrixf(_camera.getGLMatrix());
-
+  
   //scene
   if (_scene != NULL)
-    _scene->draw();
-    // _scene->draw(_camera.getMatrix());
-  glFlush();  
+  _scene->draw();
+  // _scene->draw(_camera.getMatrix());
+  glFlush();
   glutSwapBuffers();
   float end = read_timer();
+#ifndef __MACH__
   std::cout << 1.f / (end - start) << " fps" << "\b\b\b\r" << std::flush;
-
+#endif
 }
 
 void Window::displayCallbackTramp(void)
 {
   Window &win = Window::Instance();
-  win.displayCallback();  
+  win.displayCallback();
 }
 
 void Window::manageKeyTramp(unsigned char c, int x, int y)
@@ -87,26 +88,28 @@ void Window::manageKey(unsigned char c, int x, int y)
 {
   (void)x;
   (void)y;
-  if (c == 'l')
-    _camera.setPos(300, 500, 1550);
+  if (c == 27)
+  exit(0);
+  else if (c == 'l')
+  _camera.setPos(300, 500, 1550);
   else if (c == 'a')
-    _camera.setPos(_camera.getPosX() - 0.5, _camera.getPosY(), _camera.getPosZ());
+  _camera.setPos(_camera.getPosX() - 0.5, _camera.getPosY(), _camera.getPosZ());
   else if (c == 'd')
-    _camera.setPos(_camera.getPosX() + 0.5, _camera.getPosY(), _camera.getPosZ());
+  _camera.setPos(_camera.getPosX() + 0.5, _camera.getPosY(), _camera.getPosZ());
   else if (c == 'w')
-    _camera.setPos(_camera.getPosX(), _camera.getPosY() + 0.5, _camera.getPosZ());
+  _camera.setPos(_camera.getPosX(), _camera.getPosY() + 0.5, _camera.getPosZ());
   else if (c == 's')
-    _camera.setPos(_camera.getPosX(), _camera.getPosY() - 0.5, _camera.getPosZ());
+  _camera.setPos(_camera.getPosX(), _camera.getPosY() - 0.5, _camera.getPosZ());
   else if (c == 'q')
-    _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() + 0.5);
+  _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() + 0.5);
   else if (c == 'e')
-    _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() - 0.5);
+  _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() - 0.5);
   else if (c == 'm')
-    {
-    }
+  {
+  }
   else if (c == 'b')
-    {
-    }
+  {
+  }
 }
 
 void Window::manageKeySpecTramp(int c, int x, int y)

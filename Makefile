@@ -18,8 +18,8 @@ CXXFLAGS	=	-Wall -Wextra -std=c++11  -ggdb
 
 
 #LDFLAGS	=	-lglut -lGLU -lGL  -lXext -lX11 -lm
+#CFLAGS 	=
 
-#CFLAGS= 
 
 OS := $(shell uname)
 
@@ -28,6 +28,7 @@ ifeq ($(OS),Linux)
 endif
 ifeq ($(OS),Darwin)
 	LDFLAGS= -framework GLUT -framework OpenGL -framework Cocoa -L/opt/local/lib -lglew
+	CFLAGS= -I/opt/local/include/GL/h
 endif
 
 

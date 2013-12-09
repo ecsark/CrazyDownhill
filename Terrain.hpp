@@ -34,6 +34,7 @@ protected:
   int _nbVertex;
 
   GLuint _VBO;
+  GLuint _VBN; //for normals
 
 public:
   Terrain(int sizeX, int sizeY, int factor):
@@ -43,8 +44,11 @@ public:
     _nbVertex = (int)pow(2, factor) + 1;
     initTerrain();
     glGenBuffers(1, &_VBO);
+    glGenBuffers(2, &_VBN);
     glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, _VBN);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3) * _pts.size(), &(_pts.front()), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3) * _normalMap.size(), &(_normalMap.front()), GL_STATIC_DRAW);
     // glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
   }
 

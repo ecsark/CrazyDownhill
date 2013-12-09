@@ -5,11 +5,13 @@
 # ifdef __linux__
 #  ifndef __GLEW_H__
 #   include <GL/glew.h>
+# 	include <glew.h>
 #  endif
 #  include <GL/gl.h>
 #  include <GL/glut.h>
 # elif __MACH__
 #  ifndef __GLEW_H__
+# 	include <glew.h>
 #  endif
 #  include <OpenGL/gl.h>
 #  include <OpenGL/glu.h>
@@ -17,5 +19,5 @@
 # else
 #  error "Operating system not supported"
 # endif
-
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
 #endif

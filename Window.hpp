@@ -10,6 +10,7 @@
 # include "Node.hpp"
 # include "Terrain.hpp"
 
+
 class Window : public Singleton<Window>
 {
 private:
@@ -32,9 +33,9 @@ public:
     glutCreateWindow("CSE 167");
 
     GLenum res = glewInit();
-    if (res != GLEW_OK)
+    /*if (res != GLEW_OK)
       std::cout << "Glew error" << std::endl;
-
+*/
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -53,6 +54,21 @@ public:
     Terrain *t = new Terrain(100, 100, 8);
     t->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
     world->attachNode(t);
+      glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+      
+      float specular[]  = {1.0, 1.0, 1.0, 1.0};
+      float shininess[] = {80.0};
+      float position[]  = {0, 10, 0, 0.0};	// lightsource position
+      glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+      glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+      glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+      glEnable(GL_COLOR_MATERIAL);
+      
+      // Generate light source:
+      glLightfv(GL_LIGHT0, GL_POSITION, position);
+      glEnable(GL_LIGHTING);
+      glEnable(GL_LIGHT0);
+
   }
 
 

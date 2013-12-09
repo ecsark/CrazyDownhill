@@ -1,18 +1,28 @@
-#version 130
+#version 120
 
 attribute vec3 vertexPosition;
-in vec3 position;
-in vec3 norm;
-in vec2 textCoord;
+attribute vec3 position;
+attribute vec3 norm;
+attribute vec2 textCoord;
 
-out vec3 outNorm;
-out vec3 texCoord;
+varying vec3 outNorm;
+varying vec3 texCoord;
+
+varying vec3 lightDir;
 
 uniform mat4 vertexPosition_modelspace;
 uniform mat4x4 MVP;
 
 void main(){
-  gl_FrontColor = gl_Color;
+
+
+  lightDir = normalize(vec3(gl_LightSource[0].position));
+  //outNorm.x = -gl_Normal.x
+  //outNorm.y = -gl_Normal.y
+  //outNorm.z = -gl_Normal.z
+	outNorm = normalize(gl_NormalMatrix * gl_Normal);
+
+  //gl_FrontColor = gl_Color;
   
   gl_Position =  gl_ModelViewProjectionMatrix * vec4(vertexPosition, 1.0);
   // gl_Position = vec4(1, 1, 1, 1.0);
