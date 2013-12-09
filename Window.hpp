@@ -53,6 +53,7 @@ public:
     _scene = world;
     Terrain *t = new Terrain(100, 100, 8);
     t->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+    //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
     world->attachNode(t);
       glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
       
@@ -63,7 +64,10 @@ public:
       glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
       glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
       glEnable(GL_COLOR_MATERIAL);
-      
+    
+    
+    //glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
       // Generate light source:
       glLightfv(GL_LIGHT0, GL_POSITION, position);
       glEnable(GL_LIGHTING);

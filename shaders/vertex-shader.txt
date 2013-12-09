@@ -1,13 +1,11 @@
 #version 120
 
 attribute vec3 vertexPosition;
-attribute vec3 position;
 attribute vec3 norm;
 attribute vec2 textCoord;
 
 varying vec3 outNorm;
 varying vec3 texCoord;
-
 varying vec3 lightDir;
 
 uniform mat4 vertexPosition_modelspace;
@@ -15,12 +13,8 @@ uniform mat4x4 MVP;
 
 void main(){
 
-
   lightDir = normalize(vec3(gl_LightSource[0].position));
-  //outNorm.x = -gl_Normal.x
-  //outNorm.y = -gl_Normal.y
-  //outNorm.z = -gl_Normal.z
-	outNorm = normalize(gl_NormalMatrix * gl_Normal);
+	outNorm = normalize(gl_NormalMatrix * norm);
 
   //gl_FrontColor = gl_Color;
   

@@ -20,6 +20,13 @@ typedef struct
   //   0.0f,  1.0f, 0.0f,
   // };
 
+struct BVertex
+{
+  float x, y, z;        //Vertex
+  float nx, ny, nz;     //Normal
+  float s0, t0;         //Texcoord0
+};
+
 class Terrain : public Geode
 {
 
@@ -32,11 +39,14 @@ protected:
   std::vector<Vertex3> p_normalMap;
   std::vector<unsigned> p_indices;
   
+  std::vector<BVertex> data;
+  
   int _sizeX;
   int _sizeY;
   int _nbVertex;
 
-  GLuint _VBO;
+  GLuint _VBODT;
+  GLuint _VBOID;
 
 public:
   Terrain(int sizeX, int sizeY, int factor):
@@ -45,13 +55,17 @@ public:
   {
     _nbVertex = (int)pow(2, factor) + 1;
     initTerrain();
-    glGenBuffers(1, &_VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3) * _pts.size(), &(_pts.front()), GL_STATIC_DRAW);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    glGenBuffers(1, &_VBODT);
+    glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(BVertex) * _pts.size(), &data[0].x, GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &_VBOID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _VBOID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*_indices.size(), &_indices[0], GL_STATIC_DRAW);
+    
   }
 
-  virtual ~Terrain() {}
+  virtual ~Terrain();
 
   void initIndiceTable(void);
   bool isInMap(int x, int y);
@@ -65,6 +79,7 @@ public:
   void initTerrain(int seed = 0);
   virtual void draw();
   void ppMap(void);
+  void generate();
   
 };
 

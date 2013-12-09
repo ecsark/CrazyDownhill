@@ -1,4 +1,4 @@
-
+#include <cassert>
 #include "Terrain.hpp"
 
 void Terrain::initIndiceTable(void)
@@ -42,6 +42,11 @@ void Terrain::initIndiceTable(void)
   // 	_indices[i] = indice ;
 	
   //     }
+}
+
+Terrain::~Terrain() {
+  glDeleteBuffers(1, &_VBOID);
+  glDeleteBuffers(1, &_VBODT);
 }
 
 bool Terrain::isInMap(int x, int y)
@@ -153,7 +158,7 @@ void Terrain::diamondSquare(int x1, int x2, int y1, int y2)
 {
   int sizeX = x2 - x1;
   int sizeY = y2 - y1;
-  int randMod = 1000000;
+  int randMod = 1000001;
   
   while (sizeX > 1 && sizeY > 1)
   {
@@ -199,10 +204,7 @@ void Terrain::initNormalMap(int max)
       // n = (_pts[INDEX(j, i+1)] - _pts[INDEX(j, i)]).cross(_pts[INDEX(j + 1, i)] - _pts[INDEX(j, i)]);
       n.normalize();
        */
-      _normalMap[INDEX(j, i)].x = (n1.x+n2.x+n3.x+n4.x)/4;
-      _normalMap[INDEX(j, i)].y = (n1.y+n2.y+n3.y+n4.y)/4;
-      _normalMap[INDEX(j, i)].z = (n1.z+n2.z+n3.z+n4.z)/4;
-      Vector3 vec((n1.x+n2.x+n3.x+n4.x)/4, (n1.y+n2.y+n3.y+n4.y)/4, (n1.z+n2.z+n3.z+n4.z)/4);
+      Vector3 vec(n1.x+n2.x+n3.x+n4.x, n1.y+n2.y+n3.y+n4.y, n1.z+n2.z+n3.z+n4.z);
       vec.normalize();
       _normalMap[INDEX(j, i)].x = vec.x;
       _normalMap[INDEX(j, i)].y = vec.y;
@@ -214,15 +216,23 @@ void Terrain::initNormalMap(int max)
   i = max - 1;
   for (j=0; j<max-1; ++j) {
     _normalMap[INDEX(j, i)].x = 0;
-    _normalMap[INDEX(j, i)].y = 0;
-    _normalMap[INDEX(j, i)].z = 1;
+    _normalMap[INDEX(j, i)].y = 1;
+    _normalMap[INDEX(j, i)].z = 0;
   }
   j = max - 1;
   for (i=0; i<=max-1; ++i) {
     _normalMap[INDEX(j, i)].x = 0;
-    _normalMap[INDEX(j, i)].y = 0;
-    _normalMap[INDEX(j, i)].z = 1;
+    _normalMap[INDEX(j, i)].y = 1;
+    _normalMap[INDEX(j, i)].z = 0;
   }
+  /*
+  for (i=0; i<max-1; ++i) {
+    for (j=0; j<max-1; ++j) {
+      _normalMap[INDEX(j, i)].x = 0;
+      _normalMap[INDEX(j, i)].y = 1;
+      _normalMap[INDEX(j, i)].z = 0;
+    }
+  }*/
 }
 
 void Terrain::initTerrain(int seed)
@@ -255,20 +265,10 @@ void Terrain::initTerrain(int seed)
   // ppMap();
   diamondSquare(0, _nbVertex, 0, _nbVertex);
   initNormalMap(_nbVertex);
+  
   initIndiceTable();
   
-  // _pts.resize(3);
-  // _pts[0].x = -1.0f;
-  // _pts[0].y =  -1.0f;
-  // _pts[0].z = 0;
-  
-  // _pts[1].x = 1.0f;
-  // _pts[1].y = -1.0f;
-  // _pts[1].z = 0;
-  
-  // _pts[2].x = 0;
-  // _pts[2].y = 1;
-  // _pts[2].z = 0;
+  generate();
   
 }
 
@@ -276,16 +276,33 @@ void Terrain::draw()
 {
   _shader.Use();
   
+  glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+  // vertex position
   GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
   glEnableVertexAttribArray(vertexID);
-  glBindBuffer(GL_ARRAY_BUFFER, _VBO);
-  glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
-  glEnableClientState(GL_NORMAL_ARRAY);
-  glNormalPointer(GL_FLOAT, 3, BUFFER_OFFSET(0));
+  glVertexAttribPointer(vertexID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(0));
+  // normal
+  GLuint normalID = glGetAttribLocation(_shader.GetProgram(), "norm");
+  glEnableVertexAttribArray(normalID);
+  glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(12));
+  // texcoord
+  GLuint texID = glGetAttribLocation(_shader.GetProgram(), "textCoord");
+  glEnableVertexAttribArray(texID);
+  glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(24));
   
+  int linked;
+  glGetProgramiv(_shader.GetProgram(), GL_LINK_STATUS, &linked);
+  assert(linked);
+  //glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+  
+
+  glBindBuffer(GL_ARRAY_BUFFER, _VBOID);
+  //glNormalPointer(GL_FLOAT, 3, BUFFER_OFFSET(0));
+  //glEnableClientState(GL_NORMAL_ARRAY);
   glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, &(_indices[0]));
   
-  glDisableClientState(GL_NORMAL_ARRAY);  _shader.UnUse();
+  //glDisableClientState(GL_NORMAL_ARRAY);
+  _shader.UnUse();
 }
 
 
@@ -302,4 +319,15 @@ void Terrain::ppMap(void)
   }
   std::cout << "======================================================" << std::endl;
   
+}
+
+void Terrain::generate(void) {
+  for (int i=0; i<_pts.size(); ++i) {
+    BVertex bv;
+    bv.x = _pts[i].x; bv.y = _pts[i].y; bv.z = _pts[i].z;
+    bv.nx = _normalMap[i].x; bv.ny = _normalMap[i].y; bv.nz = _normalMap[i].z;
+    // FIXME: for texcoord
+    bv.t0 = bv.s0 = 0;
+    data.push_back(bv);
+  }
 }
