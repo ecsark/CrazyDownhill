@@ -207,7 +207,7 @@ void Terrain::initNormalMap(int max)
       Vector3 vec(n1.x+n2.x+n3.x+n4.x, n1.y+n2.y+n3.y+n4.y, n1.z+n2.z+n3.z+n4.z);
       vec.normalize();
       _normalMap[INDEX(j, i)].x = vec.x;
-      _normalMap[INDEX(j, i)].y = vec.y;
+      _normalMap[INDEX(j, i)].y = -vec.y;
       _normalMap[INDEX(j, i)].z = vec.z;
       
     }
@@ -274,8 +274,9 @@ void Terrain::initTerrain(int seed)
 
 void Terrain::draw()
 {
+
+  glutSolidSphere(10,10,10);
   _shader.Use();
-  
   glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
   // vertex position
   GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
@@ -284,24 +285,24 @@ void Terrain::draw()
   // normal
   GLuint normalID = glGetAttribLocation(_shader.GetProgram(), "norm");
   glEnableVertexAttribArray(normalID);
-  glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(12));
+  glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 3));
   // texcoord
   GLuint texID = glGetAttribLocation(_shader.GetProgram(), "textCoord");
   glEnableVertexAttribArray(texID);
-  glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(24));
+  glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 6));
   
   int linked;
   glGetProgramiv(_shader.GetProgram(), GL_LINK_STATUS, &linked);
   assert(linked);
-  //glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+  // glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
   
 
-  glBindBuffer(GL_ARRAY_BUFFER, _VBOID);
+  glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
   //glNormalPointer(GL_FLOAT, 3, BUFFER_OFFSET(0));
-  //glEnableClientState(GL_NORMAL_ARRAY);
-  glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, &(_indices[0]));
+  // glEnableClientState(GL_NORMAL_ARRAY);
+  glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, 0);
   
-  //glDisableClientState(GL_NORMAL_ARRAY);
+  // glDisableClientState(GL_NORMAL_ARRAY);
   _shader.UnUse();
 }
 

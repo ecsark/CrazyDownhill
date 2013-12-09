@@ -5,7 +5,6 @@
 # ifdef __linux__
 #  ifndef __GLEW_H__
 #   include <GL/glew.h>
-# 	include <glew.h>
 #  endif
 #  include <GL/gl.h>
 #  include <GL/glut.h>

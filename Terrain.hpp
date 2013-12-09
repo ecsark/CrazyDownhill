@@ -54,6 +54,7 @@ public:
     _sizeY(sizeY)
   {
     _nbVertex = (int)pow(2, factor) + 1;
+
     initTerrain();
     glGenBuffers(1, &_VBODT);
     glBindBuffer(GL_ARRAY_BUFFER, _VBODT);

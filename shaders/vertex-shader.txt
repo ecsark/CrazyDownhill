@@ -14,9 +14,9 @@ uniform mat4x4 MVP;
 void main(){
 
   lightDir = normalize(vec3(gl_LightSource[0].position));
-	outNorm = normalize(gl_NormalMatrix * norm);
+  outNorm = normalize(gl_NormalMatrix * norm);
 
-  //gl_FrontColor = gl_Color;
+  gl_FrontColor = gl_Color;
   
   gl_Position =  gl_ModelViewProjectionMatrix * vec4(vertexPosition, 1.0);
   // gl_Position = vec4(1, 1, 1, 1.0);
