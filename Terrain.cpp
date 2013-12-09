@@ -1,9 +1,46 @@
 
 #include "Terrain.hpp"
 
-// void Terrain::initIndiceTable()
-// {
-// }
+void Terrain::initIndiceTable(void)
+{
+
+  const unsigned int terrainWidth = _nbVertex;
+  const unsigned int terrainHeight = _nbVertex;
+ 
+  // 2 triangles for every quad of the terrain mesh
+  const unsigned int numTriangles = ( terrainWidth - 1 ) * ( terrainHeight - 1 ) * 2;
+ 
+  // 3 indices for each triangle in the terrain mesh
+  _indices.resize( numTriangles * 3 );
+ 
+  unsigned int index = 0; // Index in the index buffer
+  for (unsigned int j = 0; j < (terrainHeight - 1); ++j )
+    {
+      for (unsigned int i = 0; i < (terrainWidth - 1); ++i )
+        {
+	  int vertexIndex = ( j * terrainWidth ) + i;
+	  // Top triangle (T0)
+	  _indices[index++] = vertexIndex;                           // V0
+	  _indices[index++] = vertexIndex + terrainWidth + 1;        // V3
+	  _indices[index++] = vertexIndex + 1;                       // V1
+	  // Bottom triangle (T1)
+	  _indices[index++] = vertexIndex;                           // V0
+	  _indices[index++] = vertexIndex + terrainWidth;            // V2
+	  _indices[index++] = vertexIndex + terrainWidth + 1;        // V3
+        }
+    }
+  // int i = 0;
+  // int j;
+  // GL_UNSIGNED_INT indice = 0;
+
+  // _indices.resize(_nbVertex * _nbVertex);
+  // for (; i < _nbVertex; ++i)
+  //   for (j = 0; j < _nbVertex; ++j)
+  //     {
+  // 	_indices[i] = indice ;
+	
+  //     }
+}
 
 bool Terrain::isInMap(int x, int y)
 {
@@ -181,6 +218,7 @@ void Terrain::initTerrain(int seed)
   // ppMap();
   diamondSquare(0, _nbVertex, 0, _nbVertex);
   initNormalMap(_nbVertex);
+  initIndiceTable();
 
   // _pts.resize(3);
   // _pts[0].x = -1.0f;
@@ -209,7 +247,8 @@ void Terrain::draw()
 
   glBindBuffer(GL_ARRAY_BUFFER, _VBO);
   glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
-  glDrawArrays(GL_POINTS, 0, _pts.size());
+  // glDrawArrays(GL_POINTS, 0, _pts.size());
+  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, &(_indices[0]));
   // glBegin(GL_POINTS);
   // for (; y < _nbVertex - 1 && 0; ++y)
   //   {
