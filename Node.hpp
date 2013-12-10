@@ -65,29 +65,74 @@ protected:
   std::vector<BVertex> data;
   std::vector<unsigned> _indices;
 
+  GLuint _VBODT;
+  GLuint _VBOID;
+
+
 public:
   void loadShaders(const std::string &vertex, const std::string &frag) {
     _shader.LoadShaders(vertex.c_str(), frag.c_str());
     // _shader.LoadFromFile(GL_VERTEX_SHADER, vertex);
     // _shader.LoadFromFile(GL_FRAGMENT_SHADER, frag);
   }
+
+  virtual void initBuffers(void)
+  {
+    glGenBuffers(1, &_VBODT);
+    glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(BVertex) * data.size(), &data[0].x, GL_STATIC_DRAW);
+    
+    glGenBuffers(1, &_VBOID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _VBOID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*_indices.size(), &_indices[0], GL_STATIC_DRAW);
+  }
+
   void loadMesh(int nVertices, float *vertices, float *normals,
 		float *texcoords, int nIndices, int *indices)
   {
-    unsigned i;
+    int i;
 
     data.resize(nVertices);
     _indices.resize(nIndices);
     for (i = 0; i < nVertices; ++i)
       {
+	BVertex bv;
+	bv.x = vertices[i * 3];
+	bv.y = vertices[i * 3 + 1];
+	bv.z = vertices[i * 3 + 2];
+
+	bv.nx = normals[i * 3];
+	bv.ny = normals[i * 3 + 1];
+	bv.nz = normals[i * 3 + 2];
 	
+	//FIXME : Check if it's correct
+	bv.t0 = texcoords[i * 2];
+	bv.s0 = texcoords[i * 2 + 1];
       }
     for (i = 0; i < nIndices; ++i)
-      {
-	
-      }
+      _indices[i] = indices[i];
   }
-  virtual void draw() {}
+
+  virtual void draw() {
+    _shader.Use();
+    glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+    // vertex position
+    GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
+    glEnableVertexAttribArray(vertexID);
+    glVertexAttribPointer(vertexID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(0));
+    // normal
+    GLuint normalID = glGetAttribLocation(_shader.GetProgram(), "norm");
+    glEnableVertexAttribArray(normalID);
+    glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 3));
+    // texcoord
+    GLuint texID = glGetAttribLocation(_shader.GetProgram(), "textCoord");
+    glEnableVertexAttribArray(texID);
+    glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 6));
+  
+    glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+    glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, 0);
+    _shader.UnUse();
+  }
 };
 
 

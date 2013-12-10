@@ -30,8 +30,6 @@ protected:
   int _sizeY;
   int _nbVertex;
 
-  GLuint _VBODT;
-  GLuint _VBOID;
 
 public:
   Terrain(int sizeX, int sizeY, int factor):
@@ -41,14 +39,7 @@ public:
     _nbVertex = (int)pow(2, factor) + 1;
 
     initTerrain();
-    glGenBuffers(1, &_VBODT);
-    glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(BVertex) * _pts.size(), &data[0].x, GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_VBOID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _VBOID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*_indices.size(), &_indices[0], GL_STATIC_DRAW);
-    
+    initBuffers();
   }
 
   virtual ~Terrain();
