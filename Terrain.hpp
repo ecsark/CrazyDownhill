@@ -14,19 +14,6 @@ typedef struct
   float x, y, z;
 } Vertex3;
 
-  // static const GLfloat g_vertex_buffer_data[] = {
-  //   -1.0f, -1.0f, 0.0f,
-  //   1.0f, -1.0f, 0.0f,
-  //   0.0f,  1.0f, 0.0f,
-  // };
-
-struct BVertex
-{
-  float x, y, z;        //Vertex
-  float nx, ny, nz;     //Normal
-  float s0, t0;         //Texcoord0
-};
-
 class Terrain : public Geode
 {
 
@@ -34,12 +21,10 @@ protected:
 
   std::vector<Vertex3> _pts;
   std::vector<Vertex3> _normalMap;
-  std::vector<unsigned> _indices;
-  std::vector<Vertex3> p_pts;
-  std::vector<Vertex3> p_normalMap;
-  std::vector<unsigned> p_indices;
+  // std::vector<Vertex3> p_pts;
+  // std::vector<Vertex3> p_normalMap;
+  // std::vector<unsigned> p_indices;
   
-  std::vector<BVertex> data;
   
   int _sizeX;
   int _sizeY;

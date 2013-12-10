@@ -9,7 +9,9 @@ SRC	=	main.cpp \
 		Node.cpp \
 		Terrain.cpp \
 		GLSLShader.cpp \
-		loadShader.cpp
+		loadShader.cpp \
+		objreader.cpp \
+		Car.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 

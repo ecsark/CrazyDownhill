@@ -9,7 +9,7 @@
 # include "Camera.hpp"
 # include "Node.hpp"
 # include "Terrain.hpp"
-
+# include "objreader.h"
 
 class Window : public Singleton<Window>
 {
@@ -19,7 +19,7 @@ private:
   int _height;
   Node *_scene;
   Camera _camera;
-
+  ObjReader _objReader;
 
 public:
   Window() :
@@ -55,6 +55,17 @@ public:
     t->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
     //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
     world->attachNode(t);
+
+    
+    
+    // Geode _Car
+      
+
+
+
+
+
+
       glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
       
       float specular[]  = {1.0, 1.0, 1.0, 1.0};

@@ -17,6 +17,13 @@
 #define DMIN -999999999999
 #define DMAX 999999999999
 
+struct BVertex
+{
+  float x, y, z;        //Vertex
+  float nx, ny, nz;     //Normal
+  float s0, t0;         //Texcoord0
+};
+
 class Node {
 public:
     double xmin=DMAX,xmax=DMIN,ymin=DMAX,ymax=DMIN,zmin=DMAX,zmax=DMIN;
@@ -55,12 +62,30 @@ class Geode: public Node {
 protected:
   
   GLSLShader _shader;
-  
+  std::vector<BVertex> data;
+  std::vector<unsigned> _indices;
+
 public:
   void loadShaders(const std::string &vertex, const std::string &frag) {
     _shader.LoadShaders(vertex.c_str(), frag.c_str());
     // _shader.LoadFromFile(GL_VERTEX_SHADER, vertex);
     // _shader.LoadFromFile(GL_FRAGMENT_SHADER, frag);
+  }
+  void loadMesh(int nVertices, float *vertices, float *normals,
+		float *texcoords, int nIndices, int *indices)
+  {
+    unsigned i;
+
+    data.resize(nVertices);
+    _indices.resize(nIndices);
+    for (i = 0; i < nVertices; ++i)
+      {
+	
+      }
+    for (i = 0; i < nIndices; ++i)
+      {
+	
+      }
   }
   virtual void draw() {}
 };
