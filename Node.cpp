@@ -30,6 +30,7 @@ double Node::getRadius() {
 
 void Group::draw() {
     for (unsigned i=0; i<nodeList.size(); ++i) {
+      if (nodeList[i])
         nodeList[i]->draw();
     }
 }

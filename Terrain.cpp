@@ -272,39 +272,39 @@ void Terrain::initTerrain(int seed)
   
 }
 
-void Terrain::draw()
-{
+// void Terrain::draw()
+// {
 
-  glutSolidSphere(10,10,10);
-  _shader.Use();
-  glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
-  // vertex position
-  GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
-  glEnableVertexAttribArray(vertexID);
-  glVertexAttribPointer(vertexID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(0));
-  // normal
-  GLuint normalID = glGetAttribLocation(_shader.GetProgram(), "norm");
-  glEnableVertexAttribArray(normalID);
-  glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 3));
-  // texcoord
-  GLuint texID = glGetAttribLocation(_shader.GetProgram(), "textCoord");
-  glEnableVertexAttribArray(texID);
-  glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 6));
+//   glutSolidSphere(10,10,10);
+//   _shader.Use();
+//   glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+//   // vertex position
+//   GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
+//   glEnableVertexAttribArray(vertexID);
+//   glVertexAttribPointer(vertexID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(0));
+//   // normal
+//   GLuint normalID = glGetAttribLocation(_shader.GetProgram(), "norm");
+//   glEnableVertexAttribArray(normalID);
+//   glVertexAttribPointer(normalID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 3));
+//   // texcoord
+//   GLuint texID = glGetAttribLocation(_shader.GetProgram(), "textCoord");
+//   glEnableVertexAttribArray(texID);
+//   glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 6));
   
-  int linked;
-  glGetProgramiv(_shader.GetProgram(), GL_LINK_STATUS, &linked);
-  assert(linked);
-  // glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+//   int linked;
+//   glGetProgramiv(_shader.GetProgram(), GL_LINK_STATUS, &linked);
+//   assert(linked);
+//   // glVertexAttribPointer(_shader["vertexPosition"], 3, GL_FLOAT, GL_FALSE, 0, 0);
   
 
-  glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
-  //glNormalPointer(GL_FLOAT, 3, BUFFER_OFFSET(0));
-  // glEnableClientState(GL_NORMAL_ARRAY);
-  glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, 0);
+//   glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+//   //glNormalPointer(GL_FLOAT, 3, BUFFER_OFFSET(0));
+//   // glEnableClientState(GL_NORMAL_ARRAY);
+//   glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, 0);
   
-  // glDisableClientState(GL_NORMAL_ARRAY);
-  _shader.UnUse();
-}
+//   // glDisableClientState(GL_NORMAL_ARRAY);
+//   _shader.UnUse();
+// }
 
 
 void Terrain::ppMap(void)

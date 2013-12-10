@@ -10,6 +10,7 @@
 # include "Node.hpp"
 # include "Terrain.hpp"
 # include "objreader.h"
+# include "Car.hpp"
 
 class Window : public Singleton<Window>
 {
@@ -19,7 +20,6 @@ private:
   int _height;
   Node *_scene;
   Camera _camera;
-  ObjReader _objReader;
 
 public:
   Window() :
@@ -51,15 +51,36 @@ public:
   {
     Group *world = new Group;
     _scene = world;
-    Terrain *t = new Terrain(100, 100, 8);
-    t->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
-    //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
-    world->attachNode(t);
+    // Terrain *te = new Terrain(100, 100, 8);
+    // te->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+    // //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
+    // Terrain *te2 = new Terrain(100, 100, 7);
+    // te2->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+    // // world->attachNode(te);
+    // // world->attachNode(te2);
+ 
+    
+    int nVerts;
+    float *vertices;
+    float *normals;
+    float *texcoords;
+    int nIndices;
+    int *indices;
 
-    
-    
-    // Geode _Car
-      
+    ObjReader::readObj("models/bunny_n.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
+    std::cout << nVerts << "   :  " << nIndices <<  std::endl;
+
+    // Transformation *t = new Transformation;
+    // world->attachNode(t);
+    Car *car = new Car;
+    car->loadCabin(nVerts, vertices, normals, texcoords, nIndices, indices,
+    		   "shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+    world->attachNode(car);
+    // t->attachNode(car);
+
+    // t->kernel.zoom(10);
+    // world->attachNode(car);
+    // FIXME : delete allocated array from objreader
 
 
 

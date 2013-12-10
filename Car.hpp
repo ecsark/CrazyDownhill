@@ -50,10 +50,11 @@ public:
   virtual ~Car() {}
 
   void loadCabin(int nVertices, float *vertices, float *normals,
-		float *texcoords, int nIndices, int *indices);
+		 float *texcoords, int nIndices, int *indices,
+		 const std::string &vertShader, const std::string &fragShader);
   void addWheel(enum Element wheelNumber, int nVertices, float *vertices,
 		float *normals, float *texcoords, int nIndices,
-		int *indices);
+		int *indices, const std::string &vertShader, const std::string &fragShader);
 };
 
 #endif

@@ -80,11 +80,11 @@ public:
   {
     glGenBuffers(1, &_VBODT);
     glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(BVertex) * data.size(), &data[0].x, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(BVertex) * data.size(), &(data[0].x), GL_DYNAMIC_DRAW);
     
     glGenBuffers(1, &_VBOID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _VBOID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*_indices.size(), &_indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*_indices.size(), &_indices[0], GL_DYNAMIC_DRAW);
   }
 
   void loadMesh(int nVertices, float *vertices, float *normals,
@@ -106,8 +106,16 @@ public:
 	bv.nz = normals[i * 3 + 2];
 	
 	//FIXME : Check if it's correct
-	bv.t0 = texcoords[i * 2];
-	bv.s0 = texcoords[i * 2 + 1];
+	if (texcoords)
+	  {
+	    bv.t0 = texcoords[i * 2];
+	    bv.s0 = texcoords[i * 2 + 1];
+	  }
+	else
+	  {
+	    bv.t0 = 0;
+	    bv.s0 = 0;
+	  }
       }
     for (i = 0; i < nIndices; ++i)
       _indices[i] = indices[i];
@@ -116,6 +124,8 @@ public:
   virtual void draw() {
     _shader.Use();
     glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+    std::cout << "program : " << _shader.GetProgram() << std::endl;
+
     // vertex position
     GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
     glEnableVertexAttribArray(vertexID);
@@ -129,8 +139,11 @@ public:
     glEnableVertexAttribArray(texID);
     glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 6));
   
-    glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
-    glDrawElements(GL_TRIANGLES, int(_indices.size()), GL_UNSIGNED_INT, 0);
+    std::cout << "used VBODT " << _VBODT << std::endl;
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _VBOID);
+    glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, NULL);
+    glutSolidSphere(10,10,10);
     _shader.UnUse();
   }
 };

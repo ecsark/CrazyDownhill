@@ -54,7 +54,7 @@ public:
   void diamondSquare(int x1, int x2, int y1, int y2);
   void initNormalMap(int max);
   void initTerrain(int seed = 0);
-  virtual void draw();
+  // virtual void draw();
   void ppMap(void);
   void generate();
   

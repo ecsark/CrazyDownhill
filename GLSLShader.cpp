@@ -49,6 +49,7 @@ void GLSLShader::LoadFromString(GLenum type, const string& source) {
 
 void GLSLShader::CreateAndLinkProgram() {
 	_program = glCreateProgram ();
+
 	if (_shaders[VERTEX_SHADER] != 0) {
 		glAttachShader (_program, _shaders[VERTEX_SHADER]);
 	}
