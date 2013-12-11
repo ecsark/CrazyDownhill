@@ -45,10 +45,19 @@ void Window::createScene(void)
   Car *car = new Car;
   car->loadCabin(nVerts, vertices, normals, texcoords, nIndices, indices,
 		 "shaders/vertex-shader.txt", "shaders/frag-shader.txt");
-  // car->addWheel();
+  ObjReader::readObj("models/Tube.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
+  car->addWheel(Car::Element::WHEEL_FRONTLEFT, nVerts, vertices, normals, texcoords, nIndices, indices,
+		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  car->addWheel(Car::Element::WHEEL_FRONTRIGHT, nVerts, vertices, normals, texcoords, nIndices, indices,
+  		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  car->addWheel(Car::Element::WHEEL_BACKLEFT, nVerts, vertices, normals, texcoords, nIndices, indices,
+  		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  car->addWheel(Car::Element::WHEEL_BACKRIGHT, nVerts, vertices, normals, texcoords, nIndices, indices,
+  		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
   // world->attachNode(car);
+  t->kernel.move(20,100,100);
   t->attachNode(car);
-  // t->kernel.zoom(10);
+  t->kernel.zoom(0.5);
   // world->attachNode(car);
   // FIXME : delete allocated array from objreader
 
