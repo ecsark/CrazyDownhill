@@ -23,7 +23,7 @@ void Window::createScene(void)
   Group *world = new Group;
   _scene = world;
   Terrain *te = new Terrain(100, 100, 8);
-  te->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  te->loadShaders("shaders/vertex-shader.txt", "shaders/frag-toon.frag");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
   // Terrain *te2 = new Terrain(100, 100, 7);
   // te2->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
