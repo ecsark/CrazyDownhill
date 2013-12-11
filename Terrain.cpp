@@ -237,7 +237,7 @@ void Terrain::initNormalMap(int max)
 
 void Terrain::initTerrain(int seed)
 {
-  srand(seed);
+  srand(3);
   
   _normalMap.resize(_nbVertex * _nbVertex);
   _pts.resize(_nbVertex * _nbVertex);
