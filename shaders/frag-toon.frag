@@ -11,7 +11,7 @@ void main()
   intensity = dot(lightDir,normalize(outNorm));
   float factor;
   
-  if (intensity > 0.95)
+  if (intensity > 0.80)
     factor = 1;
   else if (intensity > 0.5)
     factor = 0.5;
@@ -19,6 +19,5 @@ void main()
     factor = 0.2;
   else
     factor = 0.1;
-
   gl_FragColor = gl_Color * gl_LightSource[0].diffuse * factor *gl_FrontMaterial.diffuse;
 }
