@@ -11,7 +11,9 @@ SRC	=	main.cpp \
 		GLSLShader.cpp \
 		loadShader.cpp \
 		objreader.cpp \
-		Car.cpp
+		Car.cpp \
+		Skybox.cpp \
+		BmpLoader.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
