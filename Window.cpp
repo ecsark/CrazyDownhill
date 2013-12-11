@@ -2,7 +2,7 @@
 #include <sys/time.h>
 #include "Window.hpp"
 
-double read_timer( )
+double read_timer(void)
 {
   static bool initialized = false;
   static timeval start;
@@ -17,6 +17,61 @@ double read_timer( )
   return 0;
 }
 
+void Window::createScene(void)
+{
+  Group *world = new Group;
+  _scene = world;
+  Terrain *te = new Terrain(100, 100, 8);
+  te->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
+  // Terrain *te2 = new Terrain(100, 100, 7);
+  // te2->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  world->attachNode(te);
+  // world->attachNode(te2);
+ 
+    
+  int nVerts;
+  float *vertices;
+  float *normals;
+  float *texcoords;
+  int nIndices;
+  int *indices;
+
+  ObjReader::readObj("models/Cube.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
+  std::cout << nVerts << "   :  " << nIndices <<  std::endl;
+
+  Transformation *t = new Transformation;
+  world->attachNode(t);
+  Car *car = new Car;
+  car->loadCabin(nVerts, vertices, normals, texcoords, nIndices, indices,
+		 "shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  // car->addWheel();
+  // world->attachNode(car);
+  t->attachNode(car);
+  // t->kernel.zoom(10);
+  // world->attachNode(car);
+  // FIXME : delete allocated array from objreader
+
+
+
+  glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+      
+  float specular[]  = {1.0, 1.0, 1.0, 1.0};
+  float shininess[] = {80.0};
+  float position[]  = {0, 10, 0, 0.0};	// lightsource position
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+  glEnable(GL_COLOR_MATERIAL);
+    
+    
+  //glEnable(GL_COLOR_MATERIAL);
+  glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+  // Generate light source:
+  glLightfv(GL_LIGHT0, GL_POSITION, position);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+}
 
 void Window::idleCallback(void)
 {
