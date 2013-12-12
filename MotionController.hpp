@@ -18,7 +18,7 @@ private:
   Kernel* kernel;
   TerrainPhysics* tp;
   Vector3 prevloc;
-  int itv = 5;
+  int itv = 10;
   int i = 0;
 public:
   MotionController(TerrainPhysics* tp);

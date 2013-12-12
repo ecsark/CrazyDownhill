@@ -27,11 +27,11 @@ public:
   TerrainPhysics(Terrain *);
   // speed relative to terrain index
   Vector3 getAcceleration(int idz, int idx);
-  Vector3 next(int idz, int idx, int &nz, int &nx);
+  Vector3 next(int idz, int idx, int &nz, int &nx, Vector3 &norm);
   // return world coordinate (only se after trTrans set)
-  Vector3 nextR(int idz, int idx, int &nz, int &nx);
+  Vector3 nextR(int idz, int idx, int &nz, int &nx, Vector3 &norm);
   // auto drive
-  Vector3 nextR();
+  Vector3 nextR(Vector3 &norm);
   Vector3 getSpeed(); //TODO: move to protected
   void setSpeed(float x, float y, float z);
   void setTerrain2WorldRatio(float ratio);

@@ -25,7 +25,7 @@ void Window::createScene(void)
 
   Group *world = new Group;
   _scene = world;
-  Terrain *te = new Terrain(100, 100, 8, 1);
+  Terrain *te = new Terrain(100, 100, 8, 0.3);
   te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
   // Terrain *te2 = new Terrain(100, 100, 7);
@@ -45,13 +45,6 @@ void Window::createScene(void)
   world->attachNode(ttrans);
   ttrans->kernel.zoom(5);
 
-  Transformation *trans = new Transformation;
-  trans->kernel.zoom(1);
-  ParticleSystem *ps = new ParticleSystem;
-  ps->loadShaders("shaders/particle-shader.vert", "shaders/particle-shader.frag");
-  world->attachNode(trans);
-  trans->attachNode(ps);
-    
   int nVerts;
   float *vertices;
   float *normals;
@@ -62,10 +55,10 @@ void Window::createScene(void)
   ObjReader::readObj("models/Cube.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
 
   Transformation *t = new Transformation;
-  // world->attachNode(t);
+  world->attachNode(t);
   Car *car = new Car;
   car->loadCabin(nVerts, vertices, normals, texcoords, nIndices, indices,
-		 "shaders/vertex-shader.txt", "shaders/frag-toon.frag");
+		 "shaders/vertex-shader.txt", "shaders/frag-shader.txt");
   ObjReader::readObj("models/Tube.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
   car->addWheel(Car::Element::WHEEL_FRONTLEFT, nVerts, vertices, normals, texcoords, nIndices, indices,
 		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
@@ -75,14 +68,15 @@ void Window::createScene(void)
   		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
   car->addWheel(Car::Element::WHEEL_BACKRIGHT, nVerts, vertices, normals, texcoords, nIndices, indices,
   		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
-  t->kernel.move(0,15,0);
+  //t->kernel.move(0,18,0); // moved to controller
   t->attachNode(car);
+  t->kernel.rotateY_pre(90);
   //t->kernel.zoom(0.5);
   // FIXME : delete allocated array from objreader
   
   TerrainPhysics *tp = new TerrainPhysics(te);
   tp->setTerrainKernel(&ttrans->kernel);
-  tp->setSpeed(2, 3, 5);
+  tp->setSpeed(5, 3, 5);
   MotionController *mc = new MotionController(tp);
   t->setMotionController(mc);
   
@@ -126,7 +120,7 @@ void Window::reshapeCallback(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
-  glTranslatef(-100,-100,-100);
+  //glTranslatef(-100,-100,-100);
   //gluLookAt(-300, 300, 100, -100, 150, -100, 0, 1, 0);
   glMatrixMode(GL_MODELVIEW);
 }
@@ -179,13 +173,14 @@ void Window::manageKeyTramp(unsigned char c, int x, int y)
 
 void Window::manageKey(unsigned char c, int x, int y)
 {
-  float speed = 5;
+  float speed = 10;
   (void)x;
   (void)y;
   if (c == 27)
   exit(0);
+  // deprecated
   else if (c == 'l')
-    _camera.setPos(100, 800, 1500);
+    _camera.setPos(_camera.getPosX()+20, _camera.getPosY()+180, _camera.getPosZ()+180);
   else if (c == 'a')
     _camera.setPos(_camera.getPosX() - speed, _camera.getPosY(), _camera.getPosZ());
   else if (c == 'd')
@@ -198,6 +193,8 @@ void Window::manageKey(unsigned char c, int x, int y)
     _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() + speed);
   else if (c == 'e')
     _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() - speed);
+  else if (c == 'f')
+    glutFullScreen();
   else if (c == 'm')
   {
   }

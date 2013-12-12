@@ -30,7 +30,8 @@ private:
 public:
   Window() :
     _scene(NULL),
-    _camera(0.f,0.f, 20.f, 500.f,0.f,-20.f, 0.f,1.f,0.f)
+    //_camera(0.f,0.f, 20.f, 500.f,0.f,-20.f, 0.f,1.f,0.f)
+    _camera(300.f,180.f, 800.f, 50.f,0.f,250.f, 0.f,1.f,0.f)
   {
     _width = 500;
     _height = 500;

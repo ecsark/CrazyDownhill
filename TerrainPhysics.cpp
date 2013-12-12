@@ -33,43 +33,44 @@ Vector4 TerrainPhysics::getCurrentPosition(Transformation *transformation) {
 // TODO: boundary check
 Vector3 TerrainPhysics::getAcceleration(int idz, int idx) {
   Vector3 n = tr->_normalMap[INDEX(idz,idx)];
-  /*
-  Vector3 a = tr->_pts[INDEX(idz,idx)];
-  Vector3 b = tr->_pts[INDEX(idz,idx+1)];// TODO: normalize
-  Vector3 c = tr->_pts[INDEX(idz+1,idx)];
-  Vector3 dir = b - a + c - a;*/
   return g - (n.dot(g))*n;
 }
 
 // input: current index / generated new index
-Vector3 TerrainPhysics::next(int idz, int idx, int &nz, int &nx) {
+Vector3 TerrainPhysics::next(int idz, int idx, int &nz, int &nx, Vector3 &norm) {
   
   Vector3 a = getAcceleration(idz, idx);
   speed = speed + a;
-  if (idz >= _nbVertex || idx >= _nbVertex
-      || idz <= 0 || idx <= 0) {
+  nz = idz+speed.z+0.4; nx = idx+speed.x+0.4;
+  if (nz >= _nbVertex || nx >= _nbVertex
+      || nz <= 0 || nx <= 0) {
     // stop the car!
     nz = idz; nx = idx;
-    return tr->_pts[INDEX(idz, idx)];
   }
-  nz = idz+speed.z+0.4; nx = idx+speed.x+0.4;
   //debug
-  std::cout<<a<<endl;
+  //std::cout<<a<<endl;
+  norm = tr->_normalMap[INDEX(nz,nx)];
   return tr->_pts[INDEX(nz, nx)];
 }
 
-Vector3 TerrainPhysics::nextR(int idz, int idx, int &nz, int &nx) {
+Vector3 TerrainPhysics::nextR(int idz, int idx, int &nz, int &nx, Vector3 &norm) {
   assert(trTrans);
-  Vector4 v = trTrans->getMatrix()*next(idz, idx, nz, nx);
+  Vector4 v = trTrans->getMatrix()*next(idz, idx, nz, nx, norm);
+  Vector4 n = trTrans->getNormMatrix()*norm;
+  n.normalize();
   Vector3 v3(v[0],v[1],v[2]);
+  norm.set(n[0],n[1],n[2]);
   //debug
   std::cout<<idz<<","<<idx<<"->"<<nz<<","<<nx<<endl;
+  
+  //std::cout<<v3.dot(tr->_normalMap[INDEX(idz,idx)])<<endl;
   return v3;
 }
 
-Vector3 TerrainPhysics::nextR() {
+Vector3 TerrainPhysics::nextR(Vector3 &norm) {
   prez = curz; prex = curx;
-  return nextR(prez, prex, curz, curx);}
+  return nextR(prez, prex, curz, curx, norm);
+}
 
 Vector3 TerrainPhysics::getSpeed() {
   return speed;

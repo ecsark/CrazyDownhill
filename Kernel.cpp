@@ -9,59 +9,76 @@ class Kernel
 private:
   int clean = 0;
 protected:
-  Matrix4 matrix;
+  Matrix4 post;
+  Matrix4 pre;
   Matrix4 transformation;
   Matrix4 cache;
+  Matrix4 normTransMat;
 public:
   Kernel() {
     reset();
   }
   
   void reset() {
-    transformation.identity();
-    matrix.identity();
+    pre.identity();
+    post.identity();
   }
   
   Matrix4 getMatrix() {
     if (clean) {
       return cache;
     }
-    cache = matrix * transformation;
+    cache = post * transformation * pre;
     clean = 1;
     return cache;
   }
   
+  void updateNormTransMat() {
+    normTransMat = cache;
+    normTransMat.invert();
+    normTransMat.transpose();
+  }
+  
+  Matrix4 getNormMatrix() {
+    if (clean) {
+      return normTransMat;
+    }
+    getMatrix();
+    updateNormTransMat();
+    return normTransMat;
+  }
+  
   void setMatrix(const Matrix4& mat) {
-    matrix = mat;
-    transformation.identity();
+    post = mat;
+    pre.identity();
     clean = 0;
   }
   
-  void spin(double deg) {
+  void rotateY_pre(double deg) {
     Matrix4 t;
     t.rotateY(deg);
-    transformation = t * transformation;
+    pre = t * pre;
     clean = 0;
   }
   
-  void rotateX(double deg) {
+  void rotateX_pre(double deg) {
     Matrix4 t;
     t.rotateX(deg);
-    transformation = t * transformation;
+    pre = t * pre;
     clean = 0;
   }
   
-  void revolveY(double deg) {
+  void rotateY_post(double deg) {
     Matrix4 t;
     t.rotateY(deg);
-    matrix = t*matrix;
+    post = t*post;
     clean = 0;
   }
   
   void rotateBy(double angle, double x, double y, double z) {
     Matrix4 r;
     r.rotate(angle, x, y, z);
-    transformation = r * transformation;
+    pre = r * pre;
     clean = 0;
   }
   
@@ -73,7 +90,7 @@ public:
     tam.translate(x, y, z);
     mat = tam * mat;
     //matrix = matrix * mat;
-    transformation = mat * transformation;
+    pre = mat * pre;
     clean = 0;
   }
   
@@ -118,7 +135,7 @@ public:
     v2.cross(v1);                                  // v2 = v2 x v1 (cross product)
     
     // Convert axis coordinates (v2) from WCS to OCS:
-    Matrix4 mInv(transformation);
+    Matrix4 mInv(pre);
     mInv.transpose();                             // invert orthogonal matrix mInv
     Vector4 V4(v2);
     Vector4 V5;
@@ -130,7 +147,7 @@ public:
     Matrix4 r;
     // Perform acutal model view matrix modification:
     r.rotate(angle, V6[0], V6[1], V6[2]);      // rotate model view matrix
-    transformation = r * transformation;
+    pre = r * pre;
     clean = 0;
   }
   
@@ -147,14 +164,19 @@ public:
   void zoom(double scale) {
     Matrix4 mat;
     mat.scale(scale,scale,scale);
-    matrix = matrix * mat;
+    post = post * mat;
     clean = 0;
   }
   
   void move(double x, double y, double z) {
     Matrix4 mat;
     mat.translate(x,y,z);
-    matrix = mat * matrix;
+    post = mat * post;
+    clean = 0;
+  }
+  
+  void setTransformation(Matrix4& mat) {
+    transformation = mat;
     clean = 0;
   }
   
