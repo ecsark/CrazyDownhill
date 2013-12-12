@@ -9,18 +9,15 @@
 
 #define INDEX(x, y) ((((y) * _nbVertex) + (x)))
 
-typedef struct
-{
-  float x, y, z;
-} Vertex3;
+class Geode;
 
 class Terrain : public Geode
 {
-
+  friend class TerrainPhysics;
 protected:
 
-  std::vector<Vertex3> _pts;
-  std::vector<Vertex3> _normalMap;
+  std::vector<Vector3> _pts;
+  std::vector<Vector3> _normalMap;
   // std::vector<Vertex3> p_pts;
   // std::vector<Vertex3> p_normalMap;
   // std::vector<unsigned> p_indices;
@@ -30,11 +27,13 @@ protected:
   int _sizeY;
   int _nbVertex;
 
+  float _smoothFactor;
 
 public:
-  Terrain(int sizeX, int sizeY, int factor):
-    _sizeX(sizeX),
-    _sizeY(sizeY)
+  Terrain(int sizeX, int sizeY, int factor, float smoothFactor = 1.f):
+  _sizeX(sizeX),
+  _sizeY(sizeY),
+  _smoothFactor(smoothFactor)
   {
     _nbVertex = (int)pow(2, factor) + 1;
 

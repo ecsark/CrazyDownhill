@@ -9,6 +9,7 @@
 #include "glheader.hpp"
 #include <cassert>
 #include "Node.hpp"
+#include "MotionController.hpp"
 
 void pushAndLoad() {
     //GLdouble matrix[16];
@@ -47,27 +48,6 @@ void Group::attachNode(Node* node) {
     nodeList.push_back(node);
 }
 
-
-void Transformation::attachNodeR(Node* node, double x, double y, double z) {
-    assert(node);
-    kernel.move(x, y, z);
-    xmin = node->xmin+x; xmax = node->xmax+x;
-    ymin = node->ymin+y; ymax = node->ymax+y;
-    zmin = node->zmin+z; zmax = node->zmax+z;
-    nodeList.push_back(node);
-}
-
-void Transformation::attachNodeR(Transformation * node) {
-    assert(node);
-    if (node->xmin<xmin)    xmin = node->xmin;
-    if (node->xmax>xmax)    xmax = node->xmax;
-    if (node->ymin<ymin)    ymin = node->ymin;
-    if (node->ymax>ymax)    ymax = node->ymax;
-    if (node->zmin<zmin)    zmin = node->zmin;
-    if (node->zmax>zmax)    zmax = node->zmax;
-    nodeList.push_back(node);
-}
-
 void Group::detachNode(Node* node) {
     assert(node);
     // FIXME : reimplement function
@@ -79,13 +59,43 @@ void Group::deleteNode(Node* node) {
     delete node;
 }
 
+void Transformation::attachNodeR(Node* node, double x, double y, double z) {
+  assert(node);
+  kernel.move(x, y, z);
+  xmin = node->xmin+x; xmax = node->xmax+x;
+  ymin = node->ymin+y; ymax = node->ymax+y;
+  zmin = node->zmin+z; zmax = node->zmax+z;
+  nodeList.push_back(node);
+}
+
+void Transformation::attachNodeR(Transformation * node) {
+  assert(node);
+  if (node->xmin<xmin)    xmin = node->xmin;
+  if (node->xmax>xmax)    xmax = node->xmax;
+  if (node->ymin<ymin)    ymin = node->ymin;
+  if (node->ymax>ymax)    ymax = node->ymax;
+  if (node->zmin<zmin)    zmin = node->zmin;
+  if (node->zmax>zmax)    zmax = node->zmax;
+  nodeList.push_back(node);
+}
+
+void Transformation::setMotionController(MotionController *mc) {
+  assert(mc);
+  this->mc = mc;
+  mc->setKernel(&kernel);
+}
+
 
 void Transformation::draw() {
-    glPushMatrix();
-    glMultMatrixf(kernel.getMatrix().getTranspose());
-    Group::draw();
-    glPopMatrix();
+  glPushMatrix();
+  if (mc) {
+    mc->next();
+  }
+  glMultMatrixf(kernel.getMatrix().getTranspose());
+  Group::draw();
+  glPopMatrix();
 }
+
 
 
 void Geode::loadShaders(const std::string &vertex, const std::string &frag) {
@@ -155,7 +165,7 @@ void Geode::draw() {
   glVertexAttribPointer(texID, 2, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(sizeof(float) * 6));
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _VBOID);
-  glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, NULL);
+  glDrawElements(GL_TRIANGLES, (int)_indices.size(), GL_UNSIGNED_INT, NULL);
   // glutSolidSphere(1,10,10);
   _shader.UnUse();
 }

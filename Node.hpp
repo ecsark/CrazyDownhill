@@ -17,6 +17,9 @@
 #define DMIN -999999999999
 #define DMAX 999999999999
 
+// forward declaration
+class MotionController;
+
 struct BVertex
 {
   float x, y, z;        //Vertex
@@ -51,10 +54,12 @@ public:
 
 class Transformation: public Group {
 public:
-    Kernel kernel;
-    virtual void draw();
-    void attachNodeR(Node*, double x, double y, double z);
-    void attachNodeR(Transformation*);
+  MotionController *mc = 0;
+  Kernel kernel;
+  virtual void draw();
+  void attachNodeR(Node*, double x, double y, double z);
+  void attachNodeR(Transformation*);
+  void setMotionController(MotionController *mc);
 };
 
 

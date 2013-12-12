@@ -2,7 +2,6 @@
 
 #include <sys/time.h>
 #include "Window.hpp"
-
 double read_timer(void)
 {
   static bool initialized = false;
@@ -22,14 +21,15 @@ void Window::createScene(void)
 {
   Group *world = new Group;
   _scene = world;
-  Terrain *te = new Terrain(100, 100, 8);
+  Terrain *te = new Terrain(300, 300, 8, 0.5);
   te->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
   // Terrain *te2 = new Terrain(100, 100, 7);
   // te2->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
-  world->attachNode(te);
-  // world->attachNode(te2);
- 
+  Transformation *ttrans = new Transformation();
+  ttrans->attachNode(te);
+  world->attachNode(ttrans);
+  ttrans->kernel.zoom(5);
     
   int nVerts;
   float *vertices;
@@ -39,7 +39,6 @@ void Window::createScene(void)
   int *indices;
 
   ObjReader::readObj("models/Cube.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
-  std::cout << nVerts << "   :  " << nIndices <<  std::endl;
 
   Transformation *t = new Transformation;
   world->attachNode(t);
@@ -55,14 +54,17 @@ void Window::createScene(void)
   		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
   car->addWheel(Car::Element::WHEEL_BACKRIGHT, nVerts, vertices, normals, texcoords, nIndices, indices,
   		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
-  // world->attachNode(car);
-  t->kernel.move(20,100,100);
+  t->kernel.move(0,15,0);
   t->attachNode(car);
-  t->kernel.zoom(0.5);
-  // world->attachNode(car);
+  //t->kernel.zoom(0.5);
   // FIXME : delete allocated array from objreader
-
-
+  
+  TerrainPhysics *tp = new TerrainPhysics(te);
+  tp->setTerrainKernel(&ttrans->kernel);
+  tp->setSpeed(2, 3, 5);
+  MotionController *mc = new MotionController(tp);
+  t->setMotionController(mc);
+  
 
   glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
       
@@ -104,6 +106,7 @@ void Window::reshapeCallback(int w, int h)
   glLoadIdentity();
   glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
   glTranslatef(-100,-100,-100);
+  //gluLookAt(-300, 300, 100, -100, 150, -100, 0, 1, 0);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -151,24 +154,25 @@ void Window::manageKeyTramp(unsigned char c, int x, int y)
 
 void Window::manageKey(unsigned char c, int x, int y)
 {
+  float speed = 5;
   (void)x;
   (void)y;
   if (c == 27)
   exit(0);
   else if (c == 'l')
-  _camera.setPos(300, 500, 1550);
+    _camera.setPos(100, 800, 1500);
   else if (c == 'a')
-  _camera.setPos(_camera.getPosX() - 0.5, _camera.getPosY(), _camera.getPosZ());
+    _camera.setPos(_camera.getPosX() - speed, _camera.getPosY(), _camera.getPosZ());
   else if (c == 'd')
-  _camera.setPos(_camera.getPosX() + 0.5, _camera.getPosY(), _camera.getPosZ());
+    _camera.setPos(_camera.getPosX() + speed, _camera.getPosY(), _camera.getPosZ());
   else if (c == 'w')
-  _camera.setPos(_camera.getPosX(), _camera.getPosY() + 0.5, _camera.getPosZ());
+    _camera.setPos(_camera.getPosX(), _camera.getPosY() + speed, _camera.getPosZ());
   else if (c == 's')
-  _camera.setPos(_camera.getPosX(), _camera.getPosY() - 0.5, _camera.getPosZ());
+    _camera.setPos(_camera.getPosX(), _camera.getPosY() - speed, _camera.getPosZ());
   else if (c == 'q')
-  _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() + 0.5);
+    _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() + speed);
   else if (c == 'e')
-  _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() - 0.5);
+    _camera.setPos(_camera.getPosX(), _camera.getPosY(), _camera.getPosZ() - speed);
   else if (c == 'm')
   {
   }

@@ -11,6 +11,9 @@
 # include "Terrain.hpp"
 # include "objreader.h"
 # include "Car.hpp"
+# include "TerrainPhysics.hpp"
+# include "MotionController.hpp"
+
 
 class Window : public Singleton<Window>
 {
@@ -33,9 +36,9 @@ public:
     glutCreateWindow("CSE 167");
 
     GLenum res = glewInit();
-    /*if (res != GLEW_OK)
+    if (res != GLEW_OK)
       std::cout << "Glew error" << std::endl;
-*/
+
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
