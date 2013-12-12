@@ -14,7 +14,9 @@ SRC	=	main.cpp \
 		Car.cpp \
 		Skybox.cpp \
 		BmpLoader.cpp \
-		ParticleSystem.cpp
+		ParticleSystem.cpp \
+		TerrainPhysics.cpp \
+		MotionController.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
