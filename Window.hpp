@@ -14,6 +14,7 @@
 # include "TerrainPhysics.hpp"
 # include "MotionController.hpp"
 # include "Skybox.hpp"
+# include "Skybox.hpp"
 
 
 class Window : public Singleton<Window>

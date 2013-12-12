@@ -44,6 +44,13 @@ void Window::createScene(void)
   ttrans->attachNode(te);
   world->attachNode(ttrans);
   ttrans->kernel.zoom(5);
+
+  Transformation *trans = new Transformation;
+  trans->kernel.zoom(1);
+  ParticleSystem *ps = new ParticleSystem;
+  ps->loadShaders("shaders/particle-shader.vert", "shaders/particle-shader.frag");
+  world->attachNode(trans);
+  trans->attachNode(ps);
     
   int nVerts;
   float *vertices;
