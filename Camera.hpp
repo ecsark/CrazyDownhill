@@ -37,6 +37,12 @@ public:
 
   ~Camera() {}
 
+  Vector3 getLookingVector(void)
+  {
+    Vector3 v(_e - _d);
+    return v;
+  }
+
   void calibrate()
   {
     Vector3 vz(_e - _d);

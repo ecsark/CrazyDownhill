@@ -25,17 +25,18 @@ void Window::createScene(void)
 
   Group *world = new Group;
   _scene = world;
-  Terrain *te = new Terrain(100, 100, 8, 0.3);
-  te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
+  Terrain *te = new Terrain(100, 100, 8, 1);
+  // te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
+  te->loadShaders("shaders/terrain-toon.vert", "shaders/terrain-toon.frag");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
   // Terrain *te2 = new Terrain(100, 100, 7);
   // te2->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
-  world->attachNode(te);
+  // world->attachNode(te);
   // world->attachNode(te2);
  
 
   Transformation *trans = new Transformation;
-  trans->kernel.zoom(1);
+  trans->kernel.zoom(5);
   ParticleSystem *ps = new ParticleSystem;
   ps->loadShaders("shaders/particle-shader.vert", "shaders/particle-shader.frag");
   world->attachNode(trans);
@@ -119,7 +120,7 @@ void Window::reshapeCallback(int w, int h)
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 1000.0);
+  glFrustum(-10.0, 10.0, -10.0, 10.0, 10, 10000.0);
   //glTranslatef(-100,-100,-100);
   //gluLookAt(-300, 300, 100, -100, 150, -100, 0, 1, 0);
   glMatrixMode(GL_MODELVIEW);

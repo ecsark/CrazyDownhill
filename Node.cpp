@@ -10,6 +10,7 @@
 #include <cassert>
 #include "Node.hpp"
 #include "MotionController.hpp"
+#include "Window.hpp"
 
 void pushAndLoad() {
     //GLdouble matrix[16];
@@ -161,6 +162,14 @@ void Geode::draw() {
   _shader.Use();
   glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
   // vertex position
+  Window &w = Window::Instance();
+  Camera &c = w.getCamera();
+  Vector3 lookVect = c.getLookingVector();
+  GLuint camDirectionID = glGetUniformLocation(_shader.GetProgram(), "EyePos");
+  glUniform3f(camDirectionID, lookVect.x,lookVect.y, lookVect.z);
+  // std::cout << "=========" << camDirectionID << "============" << std::endl;
+  // std::cout << lookVect << std::endl;
+
   GLuint vertexID = glGetAttribLocation(_shader.GetProgram(), "vertexPosition");
   glEnableVertexAttribArray(vertexID);
   glVertexAttribPointer(vertexID, 3, GL_FLOAT, GL_FALSE, sizeof(BVertex), BUFFER_OFFSET(0));

@@ -71,6 +71,7 @@ public:
   void manageKeySpec(int c, int x, int y);
   void manageMouse(int button, int state, unsigned x, unsigned y);
   void manageMouseMotion(unsigned x, unsigned y);
+  Camera &getCamera(void) {return _camera;};
 
   void show()
   {
