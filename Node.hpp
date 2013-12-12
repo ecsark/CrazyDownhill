@@ -33,6 +33,7 @@ public:
     virtual Vector3 getCenter();
     virtual double getRadius();
     virtual void draw() = 0;
+  virtual void update() {}
     virtual ~Node(){}
 };
 
@@ -47,6 +48,7 @@ public:
      //x,y,z as center
     void detachNode(Node*);
     void deleteNode(Node*); //which will free the node as well
+  virtual void update();
     
     
 };

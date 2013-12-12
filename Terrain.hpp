@@ -26,7 +26,6 @@ protected:
   int _sizeX;
   int _sizeY;
   int _nbVertex;
-
   float _smoothFactor;
 
 public:
@@ -36,7 +35,6 @@ public:
   _smoothFactor(smoothFactor)
   {
     _nbVertex = (int)pow(2, factor) + 1;
-
     initTerrain();
     initBuffers();
   }

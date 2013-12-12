@@ -2,6 +2,8 @@
 
 #include <sys/time.h>
 #include "Window.hpp"
+#include "ParticleSystem.hpp"
+
 double read_timer(void)
 {
   static bool initialized = false;
@@ -19,13 +21,25 @@ double read_timer(void)
 
 void Window::createScene(void)
 {
+  _skybox.loadSkybox();
+
   Group *world = new Group;
   _scene = world;
-  Terrain *te = new Terrain(300, 300, 8, 0.5);
-  te->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  Terrain *te = new Terrain(100, 100, 8, 1);
+  te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
   // Terrain *te2 = new Terrain(100, 100, 7);
   // te2->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+  world->attachNode(te);
+  // world->attachNode(te2);
+ 
+
+  Transformation *trans = new Transformation;
+  trans->kernel.zoom(1);
+  ParticleSystem *ps = new ParticleSystem;
+  ps->loadShaders("shaders/particle-shader.vert", "shaders/particle-shader.frag");
+  world->attachNode(trans);
+  trans->attachNode(ps);
   Transformation *ttrans = new Transformation();
   ttrans->attachNode(te);
   world->attachNode(ttrans);
@@ -41,10 +55,10 @@ void Window::createScene(void)
   ObjReader::readObj("models/Cube.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
 
   Transformation *t = new Transformation;
-  world->attachNode(t);
+  // world->attachNode(t);
   Car *car = new Car;
   car->loadCabin(nVerts, vertices, normals, texcoords, nIndices, indices,
-		 "shaders/vertex-shader.txt", "shaders/frag-shader.txt");
+		 "shaders/vertex-shader.txt", "shaders/frag-toon.frag");
   ObjReader::readObj("models/Tube.obj", nVerts, &vertices, &normals, &texcoords, nIndices, &indices);
   car->addWheel(Car::Element::WHEEL_FRONTLEFT, nVerts, vertices, normals, texcoords, nIndices, indices,
 		"shaders/vertex-shader.txt", "shaders/frag-shader.txt");
@@ -129,8 +143,12 @@ void Window::displayCallback(void)
   glLoadMatrixf(_camera.getGLMatrix());
   
   //scene
+  _skybox.draw();
   if (_scene != NULL)
-  _scene->draw();
+    {
+      _scene->update();
+      _scene->draw();
+    }
   // _scene->draw(_camera.getMatrix());
   glFlush();
   glutSwapBuffers();

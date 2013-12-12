@@ -29,6 +29,15 @@ double Node::getRadius() {
 }
 
 
+void Group::update(void)
+{
+  unsigned i;
+
+  for (i = 0; i < nodeList.size(); ++i)
+    if (nodeList[i])
+      nodeList[i]->update();
+}
+
 void Group::draw() {
     for (unsigned i=0; i<nodeList.size(); ++i) {
       if (nodeList[i])
