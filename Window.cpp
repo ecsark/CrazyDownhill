@@ -189,6 +189,17 @@ void Window::manageKey(unsigned char c, int x, int y)
   else if (c == 'b')
   {
   }
+  else if (c == 'f')
+  {
+    if (!_fullScreen)
+      glutFullScreen();
+    else
+      {
+	glutReshapeWindow(_width, _height);
+	glutPositionWindow(0,0);
+      }
+    _fullScreen = !_fullScreen;
+  }
 }
 
 void Window::manageKeySpecTramp(int c, int x, int y)

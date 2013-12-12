@@ -22,6 +22,7 @@ private:
   Node *_scene;
   Camera _camera;
   Skybox _skybox;
+  bool _fullScreen;
 
 public:
   Window() :
