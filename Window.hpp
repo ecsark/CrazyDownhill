@@ -16,7 +16,6 @@
 # include "Skybox.hpp"
 # include "Skybox.hpp"
 
-
 class Window : public Singleton<Window>
 {
 private:
@@ -27,12 +26,14 @@ private:
   Camera _camera;
   Skybox _skybox;
   bool _fullScreen;
+  bool _terrainToon;
 
 public:
   Window() :
     _scene(NULL),
     //_camera(0.f,0.f, 20.f, 500.f,0.f,-20.f, 0.f,1.f,0.f)
-    _camera(300.f,180.f, 800.f, 50.f,0.f,250.f, 0.f,1.f,0.f)
+    _camera(300.f,180.f, 800.f, 50.f,0.f,250.f, 0.f,1.f,0.f),
+    _terrainToon(false)
   {
     _width = 500;
     _height = 500;
@@ -72,6 +73,7 @@ public:
   void manageMouse(int button, int state, unsigned x, unsigned y);
   void manageMouseMotion(unsigned x, unsigned y);
   Camera &getCamera(void) {return _camera;};
+  bool isTerrainToon(void) const {return _terrainToon;}
 
   void show()
   {

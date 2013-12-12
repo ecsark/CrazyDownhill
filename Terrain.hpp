@@ -30,9 +30,10 @@ protected:
 
 public:
   Terrain(int sizeX, int sizeY, int factor, float smoothFactor = 1.f):
+    Geode(true, false),
   _sizeX(sizeX),
   _sizeY(sizeY),
-  _smoothFactor(smoothFactor)
+    _smoothFactor(smoothFactor)
   {
     _nbVertex = (int)pow(2, factor) + 1;
     initTerrain();

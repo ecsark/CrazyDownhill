@@ -71,12 +71,19 @@ protected:
   GLSLShader _shader;
   std::vector<BVertex> data;
   std::vector<unsigned> _indices;
-
+  bool _isTerrain;
+  bool _isTerrainToon;
   GLuint _VBODT;
   GLuint _VBOID;
 
 
 public:
+  Geode(bool isTerrain = false, bool isTerrainToon = false):
+    _isTerrain(isTerrain),
+    _isTerrainToon(isTerrainToon)
+  {
+  }
+  
   void loadShaders(const std::string &vertex, const std::string &frag);
   virtual void initBuffers(void);
   void loadMesh(int nVertices, float *vertices, float *normals,

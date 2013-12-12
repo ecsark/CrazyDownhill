@@ -26,8 +26,8 @@ void Window::createScene(void)
   Group *world = new Group;
   _scene = world;
   Terrain *te = new Terrain(100, 100, 8, 1);
-  // te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
-  te->loadShaders("shaders/terrain-toon.vert", "shaders/terrain-toon.frag");
+  te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
+  // te->loadShaders("shaders/terrain-toon.vert", "shaders/terrain-toon.frag");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
   // Terrain *te2 = new Terrain(100, 100, 7);
   // te2->loadShaders("shaders/vertex-shader.txt", "shaders/frag-shader.txt");
@@ -212,6 +212,15 @@ void Window::manageKey(unsigned char c, int x, int y)
 	glutPositionWindow(0,0);
       }
     _fullScreen = !_fullScreen;
+  }
+  else if (c == 't')
+  {
+    _terrainToon = !_terrainToon;
+    // toggle toon on terrain
+  }
+  else if (c == 'g')
+  {
+    // regenerate the terrain
   }
 }
 

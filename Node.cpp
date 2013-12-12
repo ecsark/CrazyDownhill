@@ -159,12 +159,21 @@ void Geode::loadMesh(int nVertices, float *vertices, float *normals,
 }
 
 void Geode::draw() {
-  _shader.Use();
-  glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
-  // vertex position
   Window &w = Window::Instance();
   Camera &c = w.getCamera();
   Vector3 lookVect = c.getLookingVector();
+  if (_isTerrain && _isTerrainToon != w.isTerrainToon())
+    {
+      _isTerrainToon = w.isTerrainToon();
+      if (_isTerrainToon)
+	loadShaders("shaders/terrain-toon.vert", "shaders/terrain-toon.frag");
+      else
+	loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
+	
+    }
+  _shader.Use();
+  glBindBuffer(GL_ARRAY_BUFFER, _VBODT);
+  // vertex position
   GLuint camDirectionID = glGetUniformLocation(_shader.GetProgram(), "EyePos");
   glUniform3f(camDirectionID, lookVect.x,lookVect.y, lookVect.z);
   // std::cout << "=========" << camDirectionID << "============" << std::endl;
