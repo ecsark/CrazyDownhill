@@ -20,6 +20,8 @@ double read_timer(void)
 
 void Window::createScene(void)
 {
+  _skybox.loadSkybox();
+
   Group *world = new Group;
   _scene = world;
   Terrain *te = new Terrain(100, 100, 8);
@@ -126,6 +128,7 @@ void Window::displayCallback(void)
   glLoadMatrixf(_camera.getGLMatrix());
   
   //scene
+  _skybox.draw();
   if (_scene != NULL)
   _scene->draw();
   // _scene->draw(_camera.getMatrix());

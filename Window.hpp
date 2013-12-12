@@ -11,6 +11,7 @@
 # include "Terrain.hpp"
 # include "objreader.h"
 # include "Car.hpp"
+# include "Skybox.hpp"
 
 class Window : public Singleton<Window>
 {
@@ -20,6 +21,7 @@ private:
   int _height;
   Node *_scene;
   Camera _camera;
+  Skybox _skybox;
 
 public:
   Window() :
