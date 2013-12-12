@@ -29,15 +29,15 @@ protected:
   int _sizeX;
   int _sizeY;
   int _nbVertex;
-
+  float _smoothFactor;
 
 public:
-  Terrain(int sizeX, int sizeY, int factor):
+  Terrain(int sizeX, int sizeY, int factor, float smoothFactor = 1.f):
     _sizeX(sizeX),
-    _sizeY(sizeY)
+    _sizeY(sizeY),
+    _smoothFactor(smoothFactor)
   {
     _nbVertex = (int)pow(2, factor) + 1;
-
     initTerrain();
     initBuffers();
   }

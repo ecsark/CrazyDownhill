@@ -124,7 +124,7 @@ void Terrain::square(int x1, int x2, int y1, int y2,
     for (j = startX; j < x2; j += stepX)
     {
       average = averageSquare(j, i, size);
-      _pts[INDEX(j, i)].y = average + (((float)((float)(rand() % (randMod * 2)) - randMod)) / 10000.f);
+      _pts[INDEX(j, i)].y = average + (((float)((float)(rand() % (randMod * 2)) - randMod)) / 10000.f) * _smoothFactor;
     }
   
 }
@@ -148,7 +148,7 @@ void Terrain::diamons(int x1, int x2, int y1, int y2,
         average = averageDiamon(j, i, size);
       else
         average = averageDiamon(j, i, size);
-      _pts[INDEX(j, i)].y = average + (((float)((float)(rand() % (randMod * 2)) - randMod)) / 10000.f);
+      _pts[INDEX(j, i)].y = average + (((float)((float)(rand() % (randMod * 2)) - randMod)) / 10000.f) * _smoothFactor;
     }
     line = !line;
   }
@@ -258,10 +258,10 @@ void Terrain::initTerrain(int seed)
       _pts[i * _nbVertex + j].z = i;
     }
   int modRand = _nbVertex * 10000;
-  _pts[0].y = ((float)(rand() % modRand)) / 10000.f;
-  _pts[_nbVertex * _nbVertex - 1].y = ((float)(rand() % modRand)) / 10000.f;
-  _pts[(_nbVertex - 1) * _nbVertex ].y = ((float)(rand() % modRand)) / 10000.f;
-  _pts[_nbVertex - 1].y = ((float)(rand() % modRand)) / 10000.f;
+  _pts[0].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
+  _pts[_nbVertex * _nbVertex - 1].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
+  _pts[(_nbVertex - 1) * _nbVertex ].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
+  _pts[_nbVertex - 1].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
   // ppMap();
   diamondSquare(0, _nbVertex, 0, _nbVertex);
   initNormalMap(_nbVertex);

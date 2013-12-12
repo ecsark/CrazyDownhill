@@ -162,7 +162,7 @@ void Skybox::draw()
   glBindBuffer(GL_ARRAY_BUFFER, _vertices);
   // GLint PVM    = glGetUniformLocation(_shader.GetProgram(), "PVM");
   GLuint vertex = glGetAttribLocation(_shader.GetProgram(), "vp");
-  std::cout << vertex << std::endl;
+  // std::cout << vertex << std::endl;
 
   glEnableVertexAttribArray(vertex);
   glVertexAttribPointer(vertex, 3, GL_FLOAT, GL_FALSE, sizeof(cube_vertices), 0);
