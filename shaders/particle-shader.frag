@@ -1,0 +1,10 @@
+#version 120
+
+uniform mat4x4 MVP;
+varying vec3 outNorm, lightDir, vpos;
+
+void main()
+{
+  gl_FragColor = gl_LightSource[0].diffuse * max(dot(outNorm, normalize(lightDir)),0.0) *gl_FrontMaterial.diffuse;
+  gl_FragColor = vec4(0.5,0.5,1,1);
+}

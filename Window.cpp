@@ -2,6 +2,7 @@
 
 #include <sys/time.h>
 #include "Window.hpp"
+#include "ParticleSystem.hpp"
 
 double read_timer(void)
 {
@@ -24,7 +25,7 @@ void Window::createScene(void)
 
   Group *world = new Group;
   _scene = world;
-  Terrain *te = new Terrain(100, 100, 8, 0.3);
+  Terrain *te = new Terrain(100, 100, 8, 1);
   te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
   // Terrain *te2 = new Terrain(100, 100, 7);
@@ -32,6 +33,13 @@ void Window::createScene(void)
   world->attachNode(te);
   // world->attachNode(te2);
  
+
+  Transformation *trans = new Transformation;
+  trans->kernel.zoom(1);
+  ParticleSystem *ps = new ParticleSystem;
+  ps->loadShaders("shaders/particle-shader.vert", "shaders/particle-shader.frag");
+  world->attachNode(trans);
+  trans->attachNode(ps);
     
   int nVerts;
   float *vertices;
@@ -44,7 +52,7 @@ void Window::createScene(void)
   std::cout << nVerts << "   :  " << nIndices <<  std::endl;
 
   Transformation *t = new Transformation;
-  world->attachNode(t);
+  // world->attachNode(t);
   Car *car = new Car;
   car->loadCabin(nVerts, vertices, normals, texcoords, nIndices, indices,
 		 "shaders/vertex-shader.txt", "shaders/frag-toon.frag");
@@ -130,7 +138,10 @@ void Window::displayCallback(void)
   //scene
   _skybox.draw();
   if (_scene != NULL)
-  _scene->draw();
+    {
+      _scene->update();
+      _scene->draw();
+    }
   // _scene->draw(_camera.getMatrix());
   glFlush();
   glutSwapBuffers();

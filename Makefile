@@ -13,7 +13,8 @@ SRC	=	main.cpp \
 		objreader.cpp \
 		Car.cpp \
 		Skybox.cpp \
-		BmpLoader.cpp
+		BmpLoader.cpp \
+		ParticleSystem.cpp
 
 OBJ	=	$(SRC:.cpp=.o)
 
