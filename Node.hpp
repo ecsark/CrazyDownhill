@@ -28,13 +28,27 @@ struct BVertex
 };
 
 class Node {
+protected:
+
+  std::string _name;
+
 public:
+
+  Node(const std::string &str = ""):
+    _name(str)
+  {}
     double xmin=DMAX,xmax=DMIN,ymin=DMAX,ymax=DMIN,zmin=DMAX,zmax=DMIN;
     virtual Vector3 getCenter();
     virtual double getRadius();
     virtual void draw() = 0;
   virtual void update() {}
     virtual ~Node(){}
+  virtual Node *getNode(const std::string &name)
+  {
+    if (_name == name)
+      return this;
+    return NULL;
+  }
 };
 
 class Group: public Node {
@@ -49,6 +63,17 @@ public:
     void detachNode(Node*);
     void deleteNode(Node*); //which will free the node as well
   virtual void update();
+  virtual Node *getNode(const std::string &name)
+  {
+    if (_name == name)
+      return this;
+    unsigned i;
+    Node *node;
+    for (i = 0; i < nodeList.size(); ++i)
+      if ((node = nodeList[i]->getNode(name)))
+	return node;
+    return NULL;
+  }
     
     
 };
@@ -78,7 +103,8 @@ protected:
 
 
 public:
-  Geode(bool isTerrain = false, bool isTerrainToon = false):
+  Geode(const std::string &name="", bool isTerrain = false, bool isTerrainToon = false):
+    Node(name),
     _isTerrain(isTerrain),
     _isTerrainToon(isTerrainToon)
   {

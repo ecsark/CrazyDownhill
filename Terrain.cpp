@@ -1,6 +1,7 @@
 #include <cassert>
 #include "Terrain.hpp"
 
+
 void Terrain::initIndiceTable(void)
 {
   
@@ -158,7 +159,8 @@ void Terrain::diamondSquare(int x1, int x2, int y1, int y2)
 {
   int sizeX = x2 - x1;
   int sizeY = y2 - y1;
-  int randMod = 1000001;
+  // int randMod = 1000001;
+  int randMod = _randMod;
   
   while (sizeX > 1 && sizeY > 1)
   {
@@ -239,10 +241,21 @@ void Terrain::initNormalMap(int max)
   }*/
 }
 
+void Terrain::regenerate(int seed)
+{
+  unsigned i = 0;
+  for (; i < _pts.size(); ++i)
+      _pts[0].y = 0;
+  _seed = seed;
+  initTerrain(1);
+  initBuffers();
+}
+
 void Terrain::initTerrain(int seed)
 {
   srand(_seed);
-  
+  std::cout << _seed << std::endl;
+
   _normalMap.resize(_nbVertex * _nbVertex);
   _pts.resize(_nbVertex * _nbVertex);
   _pts.front().x = 0;
@@ -261,11 +274,11 @@ void Terrain::initTerrain(int seed)
       _pts[i * _nbVertex + j].y = 0;
       _pts[i * _nbVertex + j].z = i;
     }
-  int modRand = _nbVertex * 10000;
-  _pts[0].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
-  _pts[_nbVertex * _nbVertex - 1].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
-  _pts[(_nbVertex - 1) * _nbVertex ].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
-  _pts[_nbVertex - 1].y = (((float)(rand() % modRand)) / 10000.f) * _smoothFactor;
+  // int _randMod = _nbVertex * 10000;
+  _pts[0].y = (((float)(rand() % _randMod)) / 10000.f) * _smoothFactor;
+  _pts[_nbVertex * _nbVertex - 1].y = (((float)(rand() % _randMod)) / 10000.f) * _smoothFactor;
+  _pts[(_nbVertex - 1) * _nbVertex ].y = (((float)(rand() % _randMod)) / 10000.f) * _smoothFactor;
+  _pts[_nbVertex - 1].y = (((float)(rand() % _randMod)) / 10000.f) * _smoothFactor;
   // ppMap();
   diamondSquare(0, _nbVertex, 0, _nbVertex);
   initNormalMap(_nbVertex);
@@ -327,6 +340,7 @@ void Terrain::ppMap(void)
 }
 
 void Terrain::generate(void) {
+  data.clear();
   for (int i=0; i<_pts.size(); ++i) {
     BVertex bv;
     bv.x = _pts[i].x; bv.y = _pts[i].y; bv.z = _pts[i].z;

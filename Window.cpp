@@ -25,7 +25,7 @@ void Window::createScene(void)
 
   Group *world = new Group;
   _scene = world;
-  Terrain *te = new Terrain(100, 100, 8, 0.5, 3);
+  Terrain *te = new Terrain("Terrain", 100, 100, 8, 0.5, 3);
   // Terrain *te = new Terrain(100, 100, 8, 1, time(NULL));
   te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
   // te->loadShaders("shaders/terrain-toon.vert", "shaders/terrain-toon.frag");
@@ -221,7 +221,54 @@ void Window::manageKey(unsigned char c, int x, int y)
   }
   else if (c == 'g')
   {
-    // regenerate the terrain
+    Node *node = _scene->getNode("Terrain");
+    Terrain *terrain;
+    if (node != NULL && (terrain = dynamic_cast<Terrain*>(node)))
+      terrain->regenerate(time(NULL));
+  }
+  else if (c == '=')
+  {
+    Node *node = _scene->getNode("Terrain");
+    Terrain *terrain;
+    if (node != NULL && (terrain = dynamic_cast<Terrain*>(node)))
+      {
+	terrain->setSmoothFactor(terrain->getSmoothFactor() + 0.1);
+	terrain->initTerrain();
+	terrain->initBuffers();
+      }
+  }
+  else if (c == '-')
+  {
+    Node *node = _scene->getNode("Terrain");
+    Terrain *terrain;
+    if (node != NULL && (terrain = dynamic_cast<Terrain*>(node)))
+      {
+	terrain->setSmoothFactor(terrain->getSmoothFactor() - 0.1);
+	terrain->initTerrain();
+	terrain->initBuffers();
+      }
+  }
+  else if (c == '[')
+  {
+    Node *node = _scene->getNode("Terrain");
+    Terrain *terrain;
+    if (node != NULL && (terrain = dynamic_cast<Terrain*>(node)))
+      {
+	terrain->setRandmod(terrain->getRandmod() + 100);
+	terrain->initTerrain();
+	terrain->initBuffers();
+      }
+  }
+  else if (c == ']')
+  {
+    Node *node = _scene->getNode("Terrain");
+    Terrain *terrain;
+    if (node != NULL && (terrain = dynamic_cast<Terrain*>(node)))
+      {
+	terrain->setRandmod(terrain->getRandmod() - 100);
+	terrain->initTerrain();
+	terrain->initBuffers();
+      }
   }
 }
 

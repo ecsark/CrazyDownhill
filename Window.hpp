@@ -40,7 +40,7 @@ public:
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(_width, _height);
     glutCreateWindow("CSE 167");
-    glutFullScreen();
+    // glutFullScreen();
 
     GLenum res = glewInit();
     if (res != GLEW_OK)

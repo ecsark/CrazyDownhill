@@ -28,16 +28,18 @@ protected:
   int _nbVertex;
   float _smoothFactor;
   int _seed;
+  int _randMod;
 
 public:
-  Terrain(int sizeX, int sizeY, int factor, float smoothFactor = 1.f, int seed = 3):
-    Geode(true, false),
+  Terrain(const std::string &name, int sizeX, int sizeY, int factor, float smoothFactor = 1.f, int seed = 3):
+    Geode(name, true, false),
   _sizeX(sizeX),
   _sizeY(sizeY),
     _smoothFactor(smoothFactor),
     _seed(seed)
   {
     _nbVertex = (int)pow(2, factor) + 1;
+    _randMod = _nbVertex * 10000;
     initTerrain();
     initBuffers();
   }
@@ -57,7 +59,11 @@ public:
   // virtual void draw();
   void ppMap(void);
   void generate();
-  
+  void regenerate(int seed = 0);
+  void setSmoothFactor(float f) {_smoothFactor = f;}
+  float getSmoothFactor(void) {return _smoothFactor;}
+  void setRandmod(float f) {_randMod = f;}
+  float getRandmod(void) {return _randMod;}
 };
 
 #endif
