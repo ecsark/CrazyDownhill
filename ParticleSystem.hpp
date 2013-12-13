@@ -31,8 +31,8 @@ private:
 
 public:
 
-  ParticleSystem(unsigned nbParticles = 3600, unsigned lifeSpan = 10000, unsigned sizeBox = 1000,
-		 unsigned sizeParticle = 2):
+  ParticleSystem(unsigned nbParticles = 3600, unsigned lifeSpan = 10000, unsigned sizeBox = 500,
+		 unsigned sizeParticle = 1):
     _nbParticles(nbParticles),
     _lifeSpan(lifeSpan),
     _size(sizeBox),

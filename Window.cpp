@@ -25,7 +25,8 @@ void Window::createScene(void)
 
   Group *world = new Group;
   _scene = world;
-  Terrain *te = new Terrain(100, 100, 8, 1);
+  Terrain *te = new Terrain(100, 100, 8, 0.5, 3);
+  // Terrain *te = new Terrain(100, 100, 8, 1, time(NULL));
   te->loadShaders("shaders/vertex-shader.txt", "shaders/Terrain-color.frag");
   // te->loadShaders("shaders/terrain-toon.vert", "shaders/terrain-toon.frag");
   //t->loadShaders("shaders/directional.vert", "shaders/directional.frag");
@@ -44,7 +45,7 @@ void Window::createScene(void)
   Transformation *ttrans = new Transformation();
   ttrans->attachNode(te);
   world->attachNode(ttrans);
-  ttrans->kernel.zoom(5);
+  ttrans->kernel.zoom(10);
 
   int nVerts;
   float *vertices;
@@ -72,12 +73,12 @@ void Window::createScene(void)
   //t->kernel.move(0,18,0); // moved to controller
   t->attachNode(car);
   t->kernel.rotateY_pre(90);
-  //t->kernel.zoom(0.5);
+  t->kernel.zoom(2);
   // FIXME : delete allocated array from objreader
   
   TerrainPhysics *tp = new TerrainPhysics(te);
   tp->setTerrainKernel(&ttrans->kernel);
-  tp->setSpeed(5, 3, 5);
+  tp->setSpeed(4, 3, 4);
   MotionController *mc = new MotionController(tp);
   t->setMotionController(mc);
   
@@ -174,7 +175,7 @@ void Window::manageKeyTramp(unsigned char c, int x, int y)
 
 void Window::manageKey(unsigned char c, int x, int y)
 {
-  float speed = 10;
+  float speed = 30;
   (void)x;
   (void)y;
   if (c == 27)

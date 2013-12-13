@@ -27,13 +27,15 @@ protected:
   int _sizeY;
   int _nbVertex;
   float _smoothFactor;
+  int _seed;
 
 public:
-  Terrain(int sizeX, int sizeY, int factor, float smoothFactor = 1.f):
+  Terrain(int sizeX, int sizeY, int factor, float smoothFactor = 1.f, int seed = 3):
     Geode(true, false),
   _sizeX(sizeX),
   _sizeY(sizeY),
-    _smoothFactor(smoothFactor)
+    _smoothFactor(smoothFactor),
+    _seed(seed)
   {
     _nbVertex = (int)pow(2, factor) + 1;
     initTerrain();

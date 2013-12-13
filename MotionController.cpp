@@ -43,7 +43,7 @@ void MotionController::next() {
   } else {
     i = 0;
   }
-  if (k<100) k++;
+  if (k<maxitr) k++;
   else return;
   assert(kernel);
   Vector3 norm;
