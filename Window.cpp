@@ -270,6 +270,28 @@ void Window::manageKey(unsigned char c, int x, int y)
 	terrain->initBuffers();
       }
   }
+  else if (c == ';')
+  {
+    Node *node = _scene->getNode("Terrain");
+    Terrain *terrain;
+    if (node != NULL && (terrain = dynamic_cast<Terrain*>(node)))
+      {
+	terrain->setFactor(terrain->getFactor() + 1);
+	// terrain->initTerrain();
+	// terrain->initBuffers();
+      }
+  }
+  else if (c == '\'')
+  {
+    Node *node = _scene->getNode("Terrain");
+    Terrain *terrain;
+    if (node != NULL && (terrain = dynamic_cast<Terrain*>(node)))
+      {
+	terrain->setFactor(terrain->getFactor() - 1);
+	// terrain->initTerrain();
+	// terrain->initBuffers();
+      }
+  }
 }
 
 void Window::manageKeySpecTramp(int c, int x, int y)

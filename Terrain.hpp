@@ -29,6 +29,7 @@ protected:
   float _smoothFactor;
   int _seed;
   int _randMod;
+  int _factor;
 
 public:
   Terrain(const std::string &name, int sizeX, int sizeY, int factor, float smoothFactor = 1.f, int seed = 3):
@@ -36,7 +37,8 @@ public:
   _sizeX(sizeX),
   _sizeY(sizeY),
     _smoothFactor(smoothFactor),
-    _seed(seed)
+    _seed(seed),
+    _factor(factor)
   {
     _nbVertex = (int)pow(2, factor) + 1;
     _randMod = _nbVertex * 10000;
@@ -64,6 +66,8 @@ public:
   float getSmoothFactor(void) {return _smoothFactor;}
   void setRandmod(float f) {_randMod = f;}
   float getRandmod(void) {return _randMod;}
+  void setFactor(int f) {_factor = f; _nbVertex = (int)pow(2, f) + 1; initTerrain(); initBuffers();}
+  int getFactor(void) {return _factor;}
 };
 
 #endif
